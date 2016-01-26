@@ -1,0 +1,10 @@
+package com.example.kucing.salim;
+
+import android.net.Uri;
+
+/**
+ * Created by node06 on 25/01/2016.
+ */
+public interface OnFragmentInteractionListener {
+    public void onFragmentInteraction(Uri uri);
+}

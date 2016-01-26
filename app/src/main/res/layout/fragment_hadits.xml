@@ -1,0 +1,74 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="layout.Hadits"
+    android:orientation="vertical"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:paddingTop="20dp">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="”Barang siapa yang melaksanakan shalat isya’ secara berjamaah maka ia seperti shalat malam separuh malam. Dan barang siapa melaksanakan shalat subuh secara berjamaah maka ia seperti shalat malam satu malam penuh.” (HR.Muslim)"
+        android:id="@+id/textView"
+        android:textAlignment="center"
+        android:textColor="#000000"/>
+
+
+    <LinearLayout
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="5dp">
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="35dp"
+            android:id="@+id/imageView2"
+            android:background="@drawable/sharebtn"
+            android:layout_gravity="center"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="Let&apos;s Share"
+            android:id="@+id/textView2"
+            android:layout_gravity="center_vertical" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp">
+        <ImageButton
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:id="@+id/postfb"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/post" />
+
+        <ImageButton
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:id="@+id/tweet"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/tweet"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"/>
+
+        <ImageButton
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:id="@+id/plus"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/plus"/>
+    </LinearLayout>
+
+</LinearLayout>

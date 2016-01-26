@@ -1,0 +1,32 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="layout.Kalendar"
+    android:orientation="vertical"
+    android:weightSum="1"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <com.prolificinteractive.materialcalendarview.MaterialCalendarView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="0.14">
+    </com.prolificinteractive.materialcalendarview.MaterialCalendarView>
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="137dp"
+        android:id="@+id/jasoall" />
+
+</LinearLayout>
+
+</ScrollView>
+

@@ -1,0 +1,44 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="layout.Jadwal"
+    android:weightSum="1"
+    android:orientation="horizontal"
+    >
+
+    <!-- TODO: Update blank fragment layout -->
+    <ImageView
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:id="@+id/imageView"
+        android:src="@drawable/night"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceListItem"
+        android:text="Subuh"
+        android:id="@+id/salatna"
+        android:paddingTop="20dp"
+        android:paddingLeft="72dp"
+        android:paddingRight="16dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="4:35"
+        android:id="@+id/waktuna"
+        android:layout_below="@+id/salatna"
+        android:layout_alignStart="@+id/salatna"
+        android:paddingBottom="20dp"
+        android:paddingLeft="72dp"
+        android:paddingRight="16dp"
+        />
+
+</RelativeLayout>
