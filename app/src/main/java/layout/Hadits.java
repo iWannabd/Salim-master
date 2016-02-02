@@ -109,4 +109,11 @@ public class Hadits extends Fragment implements OnFragmentInteractionListener {
 
     }
 
+    @Override
+    public void setNowDate(String te) {
+
+    }
+
+
+
 }

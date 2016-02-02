@@ -1,16 +1,40 @@
 package layout;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CalendarView;
+import android.widget.ListView;
+
+import com.example.kucing.salim.jadwalSholatAdapter;
+import com.example.kucing.salim.modelListJadwalSolat;
+import com.prolificinteractive.materialcalendarview.*;
 
 import com.example.kucing.salim.OnFragmentInteractionListener;
 import com.example.kucing.salim.R;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -20,7 +44,7 @@ import com.example.kucing.salim.R;
  * Use the {@link Kalendar#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class Kalendar extends Fragment implements OnFragmentInteractionListener{
+public class Kalendar extends Fragment implements OnFragmentInteractionListener,OnDateSelectedListener{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -31,6 +55,16 @@ public class Kalendar extends Fragment implements OnFragmentInteractionListener{
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+    public ArrayList<modelListJadwalSolat> CustomListViewValuesArr = new ArrayList<>();
+    JSONObject harian,bulanan;
+    FetchCustomJason mTask;
+    public Date selectedDate;
+    SimpleDateFormat d = new SimpleDateFormat("d");
+    SimpleDateFormat y = new SimpleDateFormat("yyyy");
+    SimpleDateFormat m = new SimpleDateFormat("M");
+
+    @Bind(R.id.jasoall) ListView daftar;
+    @Bind(R.id.kalen) MaterialCalendarView kalendar;
 
     public Kalendar() {
         // Required empty public constructor
@@ -68,6 +102,9 @@ public class Kalendar extends Fragment implements OnFragmentInteractionListener{
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_kalendar, container, false);
+        ButterKnife.bind(this,v);
+        kalendar.setOnDateChangedListener(this);
+
         return v;
     }
 
@@ -96,6 +133,50 @@ public class Kalendar extends Fragment implements OnFragmentInteractionListener{
         mListener = null;
     }
 
+    public void setListData(String jason_string) throws JSONException {
+        CustomListViewValuesArr.clear();
+        bulanan = new JSONObject(jason_string);
+        harian = bulanan.getJSONObject(d.format(selectedDate));
+        modelListJadwalSolat subuh = new modelListJadwalSolat();
+        //subuh
+        subuh.setImage(R.drawable.night);
+        subuh.setSolatna("Subuh");
+        subuh.setWaktuna(harian.getString("fajr"));
+        CustomListViewValuesArr.add(subuh);
+        Log.d("SALAH", "setListData: "+harian.getString("fajr"));
+        //dzuhr
+        modelListJadwalSolat dzuhr = new modelListJadwalSolat();
+        dzuhr.setImage(R.drawable.day);
+        dzuhr.setSolatna("Dzuhr");
+        dzuhr.setWaktuna(harian.getString("zuhr"));
+        CustomListViewValuesArr.add(dzuhr);
+        //ashar
+        modelListJadwalSolat ashar = new modelListJadwalSolat();
+        ashar.setImage(R.drawable.day);
+        ashar.setSolatna("Ashar");
+        ashar.setWaktuna(harian.getString("asr"));
+        CustomListViewValuesArr.add(ashar);
+        //maghrib
+        modelListJadwalSolat maghr = new modelListJadwalSolat();
+        maghr.setImage(R.drawable.night);
+        maghr.setSolatna("Maghrib");
+        maghr.setWaktuna(harian.getString("maghrib"));
+        CustomListViewValuesArr.add(maghr);
+        //isya
+        modelListJadwalSolat isya = new modelListJadwalSolat();
+        isya.setImage(R.drawable.night);
+        isya.setSolatna("Isya");
+        isya.setWaktuna(harian.getString("isha"));
+        CustomListViewValuesArr.add(isya);
+        Log.d("SALAH", "mungkin salah di sini kah? "+isya.getWaktuna());
+
+        Resources res = getResources();
+        daftar = (ListView) this.getActivity().findViewById(R.id.jasoall);
+        jadwalSholatAdapter adapter = new jadwalSholatAdapter(this.getActivity(),CustomListViewValuesArr,res);
+        Log.d("SALAH", "atau di sini?");
+        daftar.setAdapter(adapter);
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -108,5 +189,59 @@ public class Kalendar extends Fragment implements OnFragmentInteractionListener{
      */
     public void onFragmentInteraction(Uri uri){
 
+    }
+//dari onfragment interaction listener
+    @Override
+    public void setNowDate(String te) {
+
+    }
+//dari kalendar material
+    @Override
+    public void onDateSelected(@NonNull MaterialCalendarView widget,@NonNull CalendarDay date, boolean selected) {
+        selectedDate = kalendar.getSelectedDate().getDate();
+//        Log.d("cal", "onDateSelected: "+ d.format(selectedDate.getDate()) + m.format(selectedDate.getDate()));
+        new FetchCustomJason().execute();
+    }
+
+    public class FetchCustomJason extends AsyncTask<String,Integer,String>{
+        HttpURLConnection urlcon;
+
+
+        @Override
+        protected String doInBackground(String... params) {
+            StringBuilder result = new StringBuilder();
+            try {
+                String urel = "http://api.xhanch.com/islamic-get-prayer-time.php?lng=107.6098111&lat=-6.9147444&yy=" + y.format(selectedDate) + "&mm=" + m.format(selectedDate) + "&gmt=7&m=json";
+                URL url = new URL(urel);
+                urlcon = (HttpURLConnection) url.openConnection();
+                InputStream in = new BufferedInputStream(urlcon.getInputStream());
+
+                BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+
+                String line;
+                while ((line = reader.readLine()) != null) result.append(line);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                urlcon.disconnect();
+            }
+            return result.toString();
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected  void onPostExecute(String result){
+
+            try {
+                setListData(result);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

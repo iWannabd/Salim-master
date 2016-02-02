@@ -1,6 +1,7 @@
 package layout;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.example.kucing.salim.FetchJasoJSON;
@@ -20,7 +22,9 @@ import com.example.kucing.salim.modelListJadwalSolat;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -35,16 +39,23 @@ public class Jadwal extends Fragment implements OnFragmentInteractionListener {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    ListView daftar;
+    public ListView daftar;
     jadwalSholatAdapter adapter;
     public Jadwal jawa = null;
     public ArrayList<modelListJadwalSolat> CustomListViewValuesArr = new ArrayList<>();
     FetchJasoJSON mTask;
+    SharedPreferences SharePref;
+    JSONObject harian,bulanan;
+    SimpleDateFormat sdf = new SimpleDateFormat("M/yyyy");
+    String expire_jason = sdf.format(new Date());
+
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    final String TAG = "SALAH";
 
     private OnFragmentInteractionListener mListener;
+
 
     public Jadwal() {
         // Required empty public constructor
@@ -78,45 +89,64 @@ public class Jadwal extends Fragment implements OnFragmentInteractionListener {
 
     }
 
-    public void setListData(JSONObject jaso) throws JSONException {
+    public void setListData(String jason_string) throws JSONException {
         CustomListViewValuesArr.clear();
-        final modelListJadwalSolat subuh = new modelListJadwalSolat();
+        Log.d(TAG, "setListData: "+jason_string);
+        bulanan = new JSONObject(jason_string);
+        SimpleDateFormat df = new SimpleDateFormat("d");
+        harian = bulanan.getJSONObject(df.format(new Date()));
+        modelListJadwalSolat subuh = new modelListJadwalSolat();
         //subuh
         subuh.setImage(R.drawable.night);
         subuh.setSolatna("Subuh");
-        subuh.setWaktuna(jaso.getString("fajr"));
+        subuh.setWaktuna(harian.getString("fajr"));
         CustomListViewValuesArr.add(subuh);
+        Log.d("SALAH", "setListData: "+harian.getString("fajr"));
         //dzuhr
-        final modelListJadwalSolat dzuhr = new modelListJadwalSolat();
+        modelListJadwalSolat dzuhr = new modelListJadwalSolat();
         dzuhr.setImage(R.drawable.day);
         dzuhr.setSolatna("Dzuhr");
-        dzuhr.setWaktuna(jaso.getString("zuhr"));
+        dzuhr.setWaktuna(harian.getString("zuhr"));
         CustomListViewValuesArr.add(dzuhr);
         //ashar
-        final modelListJadwalSolat ashar = new modelListJadwalSolat();
+        modelListJadwalSolat ashar = new modelListJadwalSolat();
         ashar.setImage(R.drawable.day);
         ashar.setSolatna("Ashar");
-        ashar.setWaktuna(jaso.getString("asr"));
+        ashar.setWaktuna(harian.getString("asr"));
         CustomListViewValuesArr.add(ashar);
         //maghrib
-        final modelListJadwalSolat maghr = new modelListJadwalSolat();
+        modelListJadwalSolat maghr = new modelListJadwalSolat();
         maghr.setImage(R.drawable.night);
         maghr.setSolatna("Maghrib");
-        maghr.setWaktuna(jaso.getString("maghrib"));
+        maghr.setWaktuna(harian.getString("maghrib"));
         CustomListViewValuesArr.add(maghr);
         //isya
-        final modelListJadwalSolat isya = new modelListJadwalSolat();
+        modelListJadwalSolat isya = new modelListJadwalSolat();
         isya.setImage(R.drawable.night);
         isya.setSolatna("Isya");
-        isya.setWaktuna(jaso.getString("isha"));
+        isya.setWaktuna(harian.getString("isha"));
         CustomListViewValuesArr.add(isya);
-
+        Log.d("SALAH", "mungkin salah di sini kah? "+isya.getWaktuna());
         Resources res = getResources();
-        daftar = (ListView)getActivity().findViewById(R.id.Jaso);
-        adapter = new jadwalSholatAdapter(getActivity(),CustomListViewValuesArr,res);
+        daftar = (ListView) this.getActivity().findViewById(R.id.Jaso);
+        adapter = new jadwalSholatAdapter(this.getActivity(),CustomListViewValuesArr,res);
+        Log.d("SALAH", "atau di sini?");
         daftar.setAdapter(adapter);
-
     }
+
+    public void simpanJason(String Jaso){
+        SharePref = this.getActivity().getSharedPreferences("Jaso", this.getActivity().MODE_PRIVATE);
+        SharedPreferences.Editor editor = SharePref.edit();
+        editor.putString(expire_jason,Jaso);
+        editor.apply();
+    }
+
+    public String bacaJason(){
+        SharePref = this.getActivity().getSharedPreferences("Jaso", this.getActivity().MODE_PRIVATE);
+        String default_jaso = getResources().getString(R.string.default_jaso);
+        return SharePref.getString(expire_jason,default_jaso);
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -126,11 +156,14 @@ public class Jadwal extends Fragment implements OnFragmentInteractionListener {
         View v = inflater.inflate(R.layout.fragment_jadwal, container, false);
 
         mTask = new FetchJasoJSON(this);
-        daftar= (ListView)getActivity().findViewById(R.id.Jaso);
+        daftar = (ListView)getActivity().findViewById(R.id.Jaso);
         mTask.execute();
+
+        mListener.setNowDate(expire_jason);
 
         return v;
     }
+
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
@@ -158,6 +191,10 @@ public class Jadwal extends Fragment implements OnFragmentInteractionListener {
     }
 
     public void onFragmentInteraction(Uri uri){
+
+    }
+
+    public void setNowDate(String te) {
 
     }
 

@@ -1,6 +1,7 @@
 package com.example.kucing.salim;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -16,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import layout.Hadits;
 import layout.Kalendar;
@@ -40,6 +42,8 @@ public class Utama extends AppCompatActivity
      */
     private ViewPager mViewPager;
 
+    TextView now_date;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,17 +63,21 @@ public class Utama extends AppCompatActivity
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
+        now_date = (TextView) findViewById(R.id.now_date);
+
+
+
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
         // Set up the drawer menu for setting and about activity
         String[] prefmen = {"About","Preference", "Statistic"};
         ListView prefMenu = (ListView) findViewById(R.id.drawerMenu);
         prefMenu.setDivider(null);
-        prefMenu.setAdapter(new PrefMenuAdapter(this,prefmen));
+        prefMenu.setAdapter(new PrefMenuAdapter(this, prefmen));
         prefMenu.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                switch (position){
+                switch (position) {
                     case 1:
                         Intent bukaPreferen = new Intent(Utama.this, PrefActivity.class);
                         startActivity(bukaPreferen);
@@ -80,7 +88,10 @@ public class Utama extends AppCompatActivity
                         break;
                 }
             }
-            @SuppressWarnings("unused") public void onClick(View v){}
+
+            @SuppressWarnings("unused")
+            public void onClick(View v) {
+            }
         });
 
     }
@@ -194,5 +205,12 @@ public class Utama extends AppCompatActivity
     public void onFragmentInteraction(Uri uri){
         //you can leave it empty
     }
+
+    @Override
+    public void setNowDate(String te) {
+        now_date.setText(te);
+    }
+
+
 }
 

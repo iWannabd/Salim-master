@@ -16,14 +16,13 @@
     <!-- TODO: Update blank fragment layout -->
 
     <com.prolificinteractive.materialcalendarview.MaterialCalendarView
+        android:id="@+id/kalen"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_weight="0.14">
-    </com.prolificinteractive.materialcalendarview.MaterialCalendarView>
+        />
     <ListView
         android:layout_width="match_parent"
-        android:layout_height="137dp"
+        android:layout_height="400dp"
         android:id="@+id/jasoall" />
 
 </LinearLayout>
