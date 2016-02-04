@@ -1,7 +1,6 @@
 package com.example.kucing.salim;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -12,6 +11,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,9 +19,16 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import layout.Hadits;
 import layout.Kalendar;
 import layout.Jadwal;
+import java.util.Date;
 
 public class Utama extends AppCompatActivity
         implements OnFragmentInteractionListener {
@@ -42,13 +49,15 @@ public class Utama extends AppCompatActivity
      */
     private ViewPager mViewPager;
 
-    TextView now_date;
-
+    @Bind(R.id.now_date) TextView now_date;
+    @Bind(R.id.next_pray) TextView next_pray;
+    SimpleDateFormat waktu = new SimpleDateFormat("HH:mm");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_utama);
+        ButterKnife.bind(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -62,10 +71,6 @@ public class Utama extends AppCompatActivity
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
-
-        now_date = (TextView) findViewById(R.id.now_date);
-
-
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
@@ -192,14 +197,6 @@ public class Utama extends AppCompatActivity
         public PlaceholderFragment() {
         }
 
-//        @Override
-//        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-//                Bundle savedInstanceState) {
-//            View rootView = inflater.inflate(R.layout.fragment_utama, container, false);
-//            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-//            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
-//            return rootView;
-//        }
     }
 
     public void onFragmentInteraction(Uri uri){
@@ -207,8 +204,32 @@ public class Utama extends AppCompatActivity
     }
 
     @Override
-    public void setNowDate(String te) {
-        now_date.setText(te);
+    public void setNowDate(String te,ArrayList<modelListJadwalSolat> jaso) {
+        //used for change the main text in the main activity
+        try {
+            Date a = waktu.parse(waktu.format(new Date()));
+            Date[] b = new Date[5];
+            for (int i=0;i<5;i++){
+                b[i] = waktu.parse(jaso.get(i).getWaktuna());
+            }
+            for (int i=1;i<4;i++) {
+                if (a.before(b[i]) && a.after(b[i-1])) {
+                    now_date.setText(jaso.get(i).getWaktuna());
+                    next_pray.setText(jaso.get(i).getSolatna());
+                }
+            }
+            if (a.after(b[4])){
+                now_date.setText(jaso.get(4).getWaktuna());
+                next_pray.setText(jaso.get(4).getSolatna());
+            }
+            if (a.before(b[0])){
+                now_date.setText(jaso.get(4).getWaktuna());
+                next_pray.setText(jaso.get(4).getSolatna());
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
     }
 
 

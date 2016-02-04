@@ -28,7 +28,7 @@
         android:layout_marginBottom="5dp">
         <ImageView
             android:layout_width="30dp"
-            android:layout_height="35dp"
+            android:layout_height="30dp"
             android:id="@+id/imageView2"
             android:background="@drawable/sharebtn"
             android:layout_gravity="center"/>
@@ -37,7 +37,7 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="Let&apos;s Share"
-            android:id="@+id/textView2"
+            android:id="@+id/shareit"
             android:layout_gravity="center_vertical" />
     </LinearLayout>
 

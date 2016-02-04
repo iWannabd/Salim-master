@@ -10,7 +10,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.example.kucing.salim.FetchJasoJSON;
@@ -47,6 +46,7 @@ public class Jadwal extends Fragment implements OnFragmentInteractionListener {
     SharedPreferences SharePref;
     JSONObject harian,bulanan;
     SimpleDateFormat sdf = new SimpleDateFormat("M/yyyy");
+    SimpleDateFormat df = new SimpleDateFormat("d");
     String expire_jason = sdf.format(new Date());
 
     // TODO: Rename and change types of parameters
@@ -93,7 +93,6 @@ public class Jadwal extends Fragment implements OnFragmentInteractionListener {
         CustomListViewValuesArr.clear();
         Log.d(TAG, "setListData: "+jason_string);
         bulanan = new JSONObject(jason_string);
-        SimpleDateFormat df = new SimpleDateFormat("d");
         harian = bulanan.getJSONObject(df.format(new Date()));
         modelListJadwalSolat subuh = new modelListJadwalSolat();
         //subuh
@@ -132,9 +131,11 @@ public class Jadwal extends Fragment implements OnFragmentInteractionListener {
         adapter = new jadwalSholatAdapter(this.getActivity(),CustomListViewValuesArr,res);
         Log.d("SALAH", "atau di sini?");
         daftar.setAdapter(adapter);
+        mListener.setNowDate(expire_jason, CustomListViewValuesArr);
     }
 
     public void simpanJason(String Jaso){
+        //berguna untuk menyimpan json string
         SharePref = this.getActivity().getSharedPreferences("Jaso", this.getActivity().MODE_PRIVATE);
         SharedPreferences.Editor editor = SharePref.edit();
         editor.putString(expire_jason,Jaso);
@@ -154,12 +155,12 @@ public class Jadwal extends Fragment implements OnFragmentInteractionListener {
         // Inflate the layout for this fragment
         jawa = this;
         View v = inflater.inflate(R.layout.fragment_jadwal, container, false);
-
+        //create an instance of FetchJasoJSON
         mTask = new FetchJasoJSON(this);
         daftar = (ListView)getActivity().findViewById(R.id.Jaso);
+        //execute the async task
         mTask.execute();
-
-        mListener.setNowDate(expire_jason);
+        //set the next prayer text view in main activity (akvitas utama)
 
         return v;
     }
@@ -194,7 +195,8 @@ public class Jadwal extends Fragment implements OnFragmentInteractionListener {
 
     }
 
-    public void setNowDate(String te) {
+    @Override
+    public void setNowDate(String te, ArrayList<modelListJadwalSolat> jaso) {
 
     }
 

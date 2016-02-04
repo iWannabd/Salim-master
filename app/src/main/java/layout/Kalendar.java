@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.kucing.salim.jadwalSholatAdapter;
 import com.example.kucing.salim.modelListJadwalSolat;
@@ -31,6 +32,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 import butterknife.Bind;
@@ -65,6 +67,7 @@ public class Kalendar extends Fragment implements OnFragmentInteractionListener,
 
     @Bind(R.id.jasoall) ListView daftar;
     @Bind(R.id.kalen) MaterialCalendarView kalendar;
+    @Bind(R.id.jasonow) TextView jasonow;
 
     public Kalendar() {
         // Required empty public constructor
@@ -104,6 +107,15 @@ public class Kalendar extends Fragment implements OnFragmentInteractionListener,
         View v = inflater.inflate(R.layout.fragment_kalendar, container, false);
         ButterKnife.bind(this,v);
         kalendar.setOnDateChangedListener(this);
+        Calendar harini = Calendar.getInstance();
+        Date ini = new Date();
+        harini.setTime(ini);
+        harini.set(Calendar.MONTH, (harini.get(Calendar.MONTH) + 2));
+        kalendar.setMaximumDate(harini);
+        harini.setTime(ini);
+        harini.set(Calendar.MONTH, (harini.get(Calendar.MONTH) - 2));
+        kalendar.setMinimumDate(harini);
+        kalendar.setDateSelected(new Date(), true);
 
         return v;
     }
@@ -190,16 +202,18 @@ public class Kalendar extends Fragment implements OnFragmentInteractionListener,
     public void onFragmentInteraction(Uri uri){
 
     }
-//dari onfragment interaction listener
+
+    //dari onfragment interaction listener
     @Override
-    public void setNowDate(String te) {
+    public void setNowDate(String te, ArrayList<modelListJadwalSolat> jaso) {
 
     }
+
+
 //dari kalendar material
     @Override
     public void onDateSelected(@NonNull MaterialCalendarView widget,@NonNull CalendarDay date, boolean selected) {
         selectedDate = kalendar.getSelectedDate().getDate();
-//        Log.d("cal", "onDateSelected: "+ d.format(selectedDate.getDate()) + m.format(selectedDate.getDate()));
         new FetchCustomJason().execute();
     }
 
@@ -232,16 +246,17 @@ public class Kalendar extends Fragment implements OnFragmentInteractionListener,
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            jasonow.setText("Tunggu...");
         }
 
         @Override
         protected  void onPostExecute(String result){
-
             try {
                 setListData(result);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+            jasonow.setText("Jadwal Sholat Untuk "+new SimpleDateFormat("dd MMMM yyyy").format(selectedDate));
         }
     }
 }
