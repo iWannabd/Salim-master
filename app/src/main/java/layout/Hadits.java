@@ -126,8 +126,9 @@ public class Hadits extends Fragment implements OnFragmentInteractionListener {
 
         Intent alertIntent = new Intent(v.getContext(), AlertRecivier.class);
         AlarmManager alma = (AlarmManager) v.getContext().getSystemService(Context.ALARM_SERVICE);
-        alma.set(AlarmManager.RTC_WAKEUP, alertTime,
-                PendingIntent.getBroadcast(v.getContext(), 0, alertIntent, PendingIntent.FLAG_UPDATE_CURRENT));
+        PendingIntent penten = PendingIntent.getBroadcast(v.getContext(), 0, alertIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        alma.set(AlarmManager.RTC_WAKEUP, alertTime,penten);
+
     }
 
     // TODO: Rename method, update argument and hook method into UI event
