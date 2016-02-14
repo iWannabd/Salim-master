@@ -13,10 +13,11 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.example.kucing.salim.FetchJasoJSON;
+import com.example.kucing.salim.ItemJadwalSholat;
+import com.example.kucing.salim.JadwalSolatParser;
 import com.example.kucing.salim.OnFragmentInteractionListener;
 import com.example.kucing.salim.R;
 import com.example.kucing.salim.jadwalSholatAdapter;
-import com.example.kucing.salim.modelListJadwalSolat;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -41,7 +42,7 @@ public class Jadwal extends Fragment implements OnFragmentInteractionListener {
     public ListView daftar;
     jadwalSholatAdapter adapter;
     public Jadwal jawa = null;
-    public ArrayList<modelListJadwalSolat> CustomListViewValuesArr = new ArrayList<>();
+    public ArrayList<ItemJadwalSholat> Jaso = new ArrayList<>();
     FetchJasoJSON mTask;
     SharedPreferences SharePref;
     JSONObject harian,bulanan;
@@ -88,62 +89,24 @@ public class Jadwal extends Fragment implements OnFragmentInteractionListener {
         }
 
     }
-
+    //I.S string json
+    //F.S Jaso diisi dengna objek ItemJadwalSholat
     public void setListData(String jason_string) throws JSONException {
-        CustomListViewValuesArr.clear();
-        Log.d(TAG, "setListData: "+jason_string);
-        bulanan = new JSONObject(jason_string);
-        harian = bulanan.getJSONObject(df.format(new Date()));
-        modelListJadwalSolat subuh = new modelListJadwalSolat();
-        //subuh
-        subuh.setImage(R.drawable.night);
-        subuh.setSolatna("Subuh");
-        subuh.setWaktuna(harian.getString("fajr"));
-        CustomListViewValuesArr.add(subuh);
-        Log.d("SALAH", "setListData: "+harian.getString("fajr"));
-        //dzuhr
-        modelListJadwalSolat dzuhr = new modelListJadwalSolat();
-        dzuhr.setImage(R.drawable.day);
-        dzuhr.setSolatna("Dzuhr");
-        dzuhr.setWaktuna(harian.getString("zuhr"));
-        CustomListViewValuesArr.add(dzuhr);
-        //ashar
-        modelListJadwalSolat ashar = new modelListJadwalSolat();
-        ashar.setImage(R.drawable.day);
-        ashar.setSolatna("Ashar");
-        ashar.setWaktuna(harian.getString("asr"));
-        CustomListViewValuesArr.add(ashar);
-        //maghrib
-        modelListJadwalSolat maghr = new modelListJadwalSolat();
-        maghr.setImage(R.drawable.night);
-        maghr.setSolatna("Maghrib");
-        maghr.setWaktuna(harian.getString("maghrib"));
-        CustomListViewValuesArr.add(maghr);
-        //isya
-        modelListJadwalSolat isya = new modelListJadwalSolat();
-        isya.setImage(R.drawable.night);
-        isya.setSolatna("Isya");
-        isya.setWaktuna(harian.getString("isha"));
-        CustomListViewValuesArr.add(isya);
-        Log.d("SALAH", "mungkin salah di sini kah? "+isya.getWaktuna());
-        Resources res = getResources();
-        daftar = (ListView) this.getActivity().findViewById(R.id.Jaso);
-        adapter = new jadwalSholatAdapter(this.getActivity(),CustomListViewValuesArr,res);
-        Log.d("SALAH", "atau di sini?");
+        adapter = JadwalSolatParser.getAdapter(jason_string,df.format(new Date()),getResources(),getActivity());
         daftar.setAdapter(adapter);
-        mListener.setNowDate(expire_jason, CustomListViewValuesArr);
+        mListener.setNowDate(expire_jason, adapter.getData());
     }
 
     public void simpanJason(String Jaso){
         //berguna untuk menyimpan json string
-        SharePref = this.getActivity().getSharedPreferences("Jaso", this.getActivity().MODE_PRIVATE);
+        SharePref = this.getActivity().getSharedPreferences("Jaso", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = SharePref.edit();
         editor.putString(expire_jason,Jaso);
         editor.apply();
     }
 
     public String bacaJason(){
-        SharePref = this.getActivity().getSharedPreferences("Jaso", this.getActivity().MODE_PRIVATE);
+        SharePref = getActivity().getSharedPreferences("Jaso", Context.MODE_PRIVATE);
         String default_jaso = getResources().getString(R.string.default_jaso);
         return SharePref.getString(expire_jason,default_jaso);
     }
@@ -157,7 +120,7 @@ public class Jadwal extends Fragment implements OnFragmentInteractionListener {
         View v = inflater.inflate(R.layout.fragment_jadwal, container, false);
         //create an instance of FetchJasoJSON
         mTask = new FetchJasoJSON(this);
-        daftar = (ListView)getActivity().findViewById(R.id.Jaso);
+        daftar = (ListView) v.findViewById(R.id.Jaso);
         //execute the async task
         mTask.execute();
         //set the next prayer text view in main activity (akvitas utama)
@@ -196,9 +159,10 @@ public class Jadwal extends Fragment implements OnFragmentInteractionListener {
     }
 
     @Override
-    public void setNowDate(String te, ArrayList<modelListJadwalSolat> jaso) {
+    public void setNowDate(String te, ArrayList<ItemJadwalSholat> jaso) {
 
     }
+
 
 
     /**

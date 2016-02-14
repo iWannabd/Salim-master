@@ -15,31 +15,19 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="”Barang siapa yang melaksanakan shalat isya’ secara berjamaah maka ia seperti shalat malam separuh malam. Dan barang siapa melaksanakan shalat subuh secara berjamaah maka ia seperti shalat malam satu malam penuh.” (HR.Muslim)"
-        android:id="@+id/textView"
+        android:id="@+id/hadits"
         android:textAlignment="center"
         android:textColor="#000000"/>
 
-
-    <LinearLayout
-        android:layout_height="wrap_content"
+    <Button
         android:layout_width="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="5dp">
-        <ImageView
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:id="@+id/imageView2"
-            android:background="@drawable/sharebtn"
-            android:layout_gravity="center"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="Let&apos;s Share"
-            android:id="@+id/shareit"
-            android:layout_gravity="center_vertical" />
-    </LinearLayout>
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Let&apos;s Share"
+        android:id="@+id/shareit"
+        android:layout_gravity="center_vertical"
+        android:drawableLeft="@drawable/sharebtn"
+        />
 
     <LinearLayout
         android:layout_height="wrap_content"

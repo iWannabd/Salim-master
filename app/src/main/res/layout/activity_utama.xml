@@ -47,7 +47,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/now_date"
-                        android:text="halo"
+                        android:text=""
                         android:textAppearance="?android:attr/textAppearanceMedium"
                         android:layout_gravity="center|top"
                         android:layout_marginTop="70dp" />
@@ -63,7 +63,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:text="Large Text"
+                        android:text=""
                         android:id="@+id/next_pray"
                         android:layout_gravity="center|top"
                         android:layout_marginTop="40dp"/>
@@ -110,6 +110,7 @@
                 app:civ_border_color="#0D5683"
                 android:layout_gravity="center"/>
             <TextView
+                android:id="@+id/user_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Isa Setiawan Abdurrazaq"

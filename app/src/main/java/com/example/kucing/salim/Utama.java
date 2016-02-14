@@ -1,16 +1,17 @@
 package com.example.kucing.salim;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.TabLayout;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-   
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,13 +23,13 @@ import android.widget.TextView;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import layout.Hadits;
-import layout.Kalendar;
 import layout.Jadwal;
-import java.util.Date;
+import layout.Kalendar;
 
 public class Utama extends AppCompatActivity
         implements OnFragmentInteractionListener {
@@ -51,7 +52,15 @@ public class Utama extends AppCompatActivity
 
     @Bind(R.id.now_date) TextView now_date;
     @Bind(R.id.next_pray) TextView next_pray;
+    @Bind(R.id.user_name) TextView username;
     SimpleDateFormat waktu = new SimpleDateFormat("HH:mm");
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        SharedPreferences getGeneralPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        username.setText(getGeneralPrefs.getString("username", "Hamba Allah"));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,21 +84,21 @@ public class Utama extends AppCompatActivity
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
         // Set up the drawer menu for setting and about activity
+        SharedPreferences getGeneralPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        username.setText(getGeneralPrefs.getString("example_text", "Hamba Allah"));
         String[] prefmen = {"About","Preference", "Statistic"};
         ListView prefMenu = (ListView) findViewById(R.id.drawerMenu);
         prefMenu.setDivider(null);
-        prefMenu.setAdapter(new PrefMenuAdapter(this, prefmen));
+        prefMenu.setAdapter(new DrawerMenu(this, prefmen));
         prefMenu.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 switch (position) {
                     case 1:
-                        Intent bukaPreferen = new Intent(Utama.this, PrefActivity.class);
-                        startActivity(bukaPreferen);
+                        startActivity(new Intent(Utama.this, SettingsActivity.class));
                         break;
                     case 0:
-                        Intent bukaAbout = new Intent(Utama.this, AboutUs.class);
-                        startActivity(bukaAbout);
+                        startActivity(new Intent(Utama.this, AboutUs.class));
                         break;
                 }
             }
@@ -142,9 +151,9 @@ public class Utama extends AppCompatActivity
                 case 0:
                     return new Jadwal();
                 case 1:
-                    return new Hadits();
-                case 2:
                     return new Kalendar();
+                case 2:
+                    return new Hadits();
                 default:
                     return null;
             }
@@ -163,13 +172,14 @@ public class Utama extends AppCompatActivity
                 case 0:
                     return "Jadwal";
                 case 1:
-                    return "Hadits";
-                case 2:
                     return "Kalender";
+                case 2:
+                    return "Hadits";
                 default:
                     return null;
             }
         }
+
     }
 
     /**
@@ -204,28 +214,37 @@ public class Utama extends AppCompatActivity
     }
 
     @Override
-    public void setNowDate(String te,ArrayList<modelListJadwalSolat> jaso) {
+    public void setNowDate(String te,ArrayList<ItemJadwalSholat> jaso) {
         //used for change the main text in the main activity
         try {
             Date a = waktu.parse(waktu.format(new Date()));
             Date[] b = new Date[5];
             for (int i=0;i<5;i++){
                 b[i] = waktu.parse(jaso.get(i).getWaktuna());
+                Log.d("wrong", "setNowDate: "+b[i]);
             }
-            for (int i=1;i<4;i++) {
-                if (a.before(b[i]) && a.after(b[i-1])) {
-                    now_date.setText(jaso.get(i).getWaktuna());
-                    next_pray.setText(jaso.get(i).getSolatna());
-                }
+            Log.d("wrong", "setNowDate: "+a);
+            if (a.before(b[1])&&a.after(b[0])) {
+                now_date.setText(jaso.get(1).getWaktuna());
+                next_pray.setText(jaso.get(1).getSolatna());
             }
-            if (a.after(b[4])){
+            if (a.before(b[2])&&a.after(b[1])) {
+                now_date.setText(jaso.get(2).getWaktuna());
+                next_pray.setText(jaso.get(2).getSolatna());
+            }
+            if (a.before(b[3])&&a.after(b[2])) {
+                now_date.setText(jaso.get(3).getWaktuna());
+                next_pray.setText(jaso.get(3).getSolatna());
+            }
+            if (a.before(b[4])&&a.after(b[3])) {
                 now_date.setText(jaso.get(4).getWaktuna());
                 next_pray.setText(jaso.get(4).getSolatna());
             }
-            if (a.before(b[0])){
-                now_date.setText(jaso.get(4).getWaktuna());
-                next_pray.setText(jaso.get(4).getSolatna());
+            if (a.after(b[4])||a.before(b[0])){
+                now_date.setText(jaso.get(0).getWaktuna());
+                next_pray.setText(jaso.get(0).getSolatna());
             }
+
         } catch (ParseException e) {
             e.printStackTrace();
         }

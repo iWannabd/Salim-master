@@ -9,5 +9,6 @@ import java.util.ArrayList;
  */
 public interface OnFragmentInteractionListener {
     public void onFragmentInteraction(Uri uri);
-    public void setNowDate(String te,ArrayList<modelListJadwalSolat> jaso);
+    public void setNowDate(String te,ArrayList<ItemJadwalSholat> jaso);
+
 }

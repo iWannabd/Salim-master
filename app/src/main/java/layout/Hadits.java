@@ -1,22 +1,29 @@
 package layout;
 
+import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.kucing.salim.AlertRecivier;
+import com.example.kucing.salim.ItemJadwalSholat;
 import com.example.kucing.salim.OnFragmentInteractionListener;
 import com.example.kucing.salim.R;
-import com.example.kucing.salim.modelListJadwalSolat;
 
 import java.util.ArrayList;
-
-import butterknife.Bind;
-import butterknife.ButterKnife;
+import java.util.GregorianCalendar;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -38,8 +45,6 @@ public class Hadits extends Fragment implements OnFragmentInteractionListener {
 
     private OnFragmentInteractionListener mListener;
 
-    @Bind(R.id.shareit)
-    ImageView shareit;
 
     public Hadits() {
         // Required empty public constructor
@@ -72,12 +77,57 @@ public class Hadits extends Fragment implements OnFragmentInteractionListener {
         }
     }
 
+    TextView hadits;
+    Button shareit;
+    ImageButton fb,tw;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_hadits, container, false);
+        hadits = (TextView) v.findViewById(R.id.hadits);
+        shareit = (Button) v.findViewById(R.id.shareit);
+        fb = (ImageButton) v.findViewById(R.id.postfb);
+        tw = (ImageButton) v.findViewById(R.id.tweet);
+
+        shareit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent bagi = new Intent();
+                bagi.setAction(Intent.ACTION_SEND);
+                bagi.putExtra(Intent.EXTRA_TEXT,hadits.getText());
+                bagi.setType("text/plain");
+                startActivity(bagi);
+            }
+        });
+
+        fb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setAlarm(v);
+            }
+        });
+
+        tw.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences sape = getActivity().getSharedPreferences("Jaso", Activity.MODE_PRIVATE);
+                String ha = sape.getString("2/2016","Empty");
+                Toast.makeText(getActivity(),ha,Toast.LENGTH_LONG).show();
+            }
+        });
+
         return v;
+    }
+
+    public void setAlarm(View v){
+        Long alertTime = new GregorianCalendar().getTimeInMillis()+5*1000;
+
+        Intent alertIntent = new Intent(v.getContext(), AlertRecivier.class);
+        AlarmManager alma = (AlarmManager) v.getContext().getSystemService(Context.ALARM_SERVICE);
+        alma.set(AlarmManager.RTC_WAKEUP, alertTime,
+                PendingIntent.getBroadcast(v.getContext(), 0, alertIntent, PendingIntent.FLAG_UPDATE_CURRENT));
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -116,12 +166,10 @@ public class Hadits extends Fragment implements OnFragmentInteractionListener {
      * >Communicating with Other Fragments</a> for more information.
      */
 
-    public void onFragmentInteraction(Uri uri){
-
-    }
+    public void onFragmentInteraction(Uri uri){}
 
     @Override
-    public void setNowDate(String te, ArrayList<modelListJadwalSolat> jaso) {
+    public void setNowDate(String te, ArrayList<ItemJadwalSholat> jaso) {
 
     }
 

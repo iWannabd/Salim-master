@@ -32,22 +32,22 @@ public class FetchJasoJSON extends AsyncTask<String, Void, String> {
         this.container = j;
     }
 
-    @TargetApi(Build.VERSION_CODES.KITKAT)
     @Override
     protected String doInBackground(String... params){
         //create the string buffer
         StringBuilder result = new StringBuilder();
-        Log.d("SALAH", "doInBackground: " + container.bacaJason());
-        if (Objects.equals(container.bacaJason(), "Empty")) {
+        if ("Empty".equals(container.bacaJason())) {
             try {
                 // getting Jaso JSON from url
                 // membuat string url berdasarkan bulan dan tahun
                 // lalu dibuatlah koneski untuk menerima String Json
-                String urel = "http://api.xhanch.com/islamic-get-prayer-time.php?lng=107.6098111&lat=-6.9147444&yy=" + ye.format(new Date()) + "&mm=" + me.format(new Date()) + "&gmt=7&m=json";
+                String urel = "http://api.xhanch.com/islamic-get-prayer-time.php?lng=107.6098111&lat=-6.9147444&yy=" +
+                        ye.format(new Date()) + "&mm=" +
+                        me.format(new Date()) + "&gmt=7&m=json";
                 URL url = new URL(urel);
                 urlcon = (HttpURLConnection) url.openConnection();
                 InputStream in = new BufferedInputStream(urlcon.getInputStream());
-                //
+
                 BufferedReader reader = new BufferedReader(new InputStreamReader(in));
                 String line;
                 while ((line = reader.readLine()) != null) {
@@ -72,18 +72,16 @@ public class FetchJasoJSON extends AsyncTask<String, Void, String> {
 
 
 
-    @TargetApi(Build.VERSION_CODES.KITKAT)
     @Override
     protected void onPostExecute(String result){
         if(container!=null && container.getActivity()!=null){
             //dicek jika sudah ada json string atau sudah aoutdate maka
             //akan disimpan
-            if (Objects.equals(container.bacaJason(), "Empty")){
+            if ("Empty".equals(container.bacaJason())){
                 container.simpanJason(result);
             }
             try {
                 container.setListData(container.bacaJason());
-                Log.d("SALAH","data data yang ada");
             } catch (JSONException e) {
                 e.printStackTrace();
             }

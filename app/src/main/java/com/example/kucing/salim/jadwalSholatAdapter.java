@@ -4,7 +4,6 @@ package com.example.kucing.salim;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,25 +12,28 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 /**
  * Created by kucing on 09/01/16.
  */
 public class jadwalSholatAdapter extends BaseAdapter {
     private Activity activity;
-    private ArrayList data;
+    private ArrayList<ItemJadwalSholat> data;
     private static LayoutInflater inflater=null;
     public Resources res;
-    modelListJadwalSolat tempValues= null;
+    ItemJadwalSholat tempValues= null;
 
-    public jadwalSholatAdapter(Activity act, ArrayList al,Resources resLocal){
+    public jadwalSholatAdapter(Activity act, ArrayList<ItemJadwalSholat> al,Resources resLocal){
         activity = act;
         data = al;
         res = resLocal;
 
         inflater = (LayoutInflater)activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
+    }
+
+    public ArrayList<ItemJadwalSholat> getData(){
+        return data;
     }
 
     public int getCount() {
@@ -75,7 +77,7 @@ public class jadwalSholatAdapter extends BaseAdapter {
             holder.text.setText("No Data");
         else {
             tempValues = null;
-            tempValues = (modelListJadwalSolat) data.get(position);
+            tempValues = (ItemJadwalSholat) data.get(position);
 
             holder.text.setText(tempValues.getSolatna());
             holder.text1.setText(tempValues.getWaktuna());

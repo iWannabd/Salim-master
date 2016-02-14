@@ -3,7 +3,8 @@ package com.example.kucing.salim;
 /**
  * Created by kucing on 10/01/16.
  */
-public class modelListJadwalSolat {
+
+public class ItemJadwalSholat {
     private String solatna;
     private  String waktuna;
     private int image;
@@ -31,4 +32,6 @@ public class modelListJadwalSolat {
     public String getWaktuna() {
         return waktuna;
     }
+
+
 }

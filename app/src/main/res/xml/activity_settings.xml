@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:title="Umum"
+        android:key="pref_key_general_settings">
+
+        <EditTextPreference
+            android:title="Nama Pengguna"
+            android:summary="masukan nama anda"
+            android:key="username"/>
+
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:title="Nyalakan Notifikasi Untuk"
+        android:key="pref_key_nofif_setting">
+
+        <CheckBoxPreference
+            android:title="Subuh"
+            android:key="subuh_alarm"
+            android:defaultValue="true"/>
+
+        <CheckBoxPreference
+            android:title="Dzuhr"
+            android:key="dzuhr_alarm"
+            android:defaultValue="true"/>
+
+        <CheckBoxPreference
+            android:title="Ashar"
+            android:key="ashar_alarm"
+            android:defaultValue="true"/>
+
+        <CheckBoxPreference
+            android:title="Maghrib"
+            android:key="maghrib_alarm"
+            android:defaultValue="true"/>
+
+        <CheckBoxPreference
+            android:title="Isya"
+            android:key="isya_alarm"
+            android:defaultValue="true"/>
+
+    </PreferenceCategory>
+
+</PreferenceScreen>
