@@ -15,10 +15,11 @@ public class FiveTime extends WakefulBroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        String idSolat = intent.getStringExtra("idSolat");
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context)
                 .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentTitle("Yey Bisa")
-                .setContentText("Alhamdulillah");
+                .setContentTitle("Sudah "+idSolat)
+                .setContentText("Solat Sekarang?");
         Intent resultIntent = new Intent(context,TowerBuilder.class);
         PendingIntent pentent = PendingIntent.getActivity(context, 9, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         mBuilder.setContentIntent(pentent);

@@ -38,23 +38,43 @@ public class AlertRecivier extends WakefulBroadcastReceiver {
     }
 
     public void setAlarmEachPrayerTime(String prayerTime,Context context, int n) throws ParseException {
+        String [] solats = {"Subuh","Dzuhr","Ashar","Maghrib","Isya'"};
         //parsing the input time
-        Date a = new SimpleDateFormat("HH:mm").parse(prayerTime);
-        Calendar cal = Calendar.getInstance();
+        Date wanted = new SimpleDateFormat("HH:mm").parse(prayerTime);
         Calendar prayTime = Calendar.getInstance();
-        prayTime.setTime(a);
+        prayTime.setTime(wanted);
+        //parsing now date
+        Date now = new SimpleDateFormat("HH:mm").parse(new SimpleDateFormat("HH:mm").format(new Date()));
+        Calendar nowTime = Calendar.getInstance();
+        nowTime.setTime(now);
+
+        Calendar calnow = Calendar.getInstance();
+        Calendar cal = Calendar.getInstance();
         //setting calendar to input time
         cal.setTimeInMillis(System.currentTimeMillis());
         cal.set(Calendar.HOUR_OF_DAY, prayTime.get(Calendar.HOUR_OF_DAY));
         cal.set(Calendar.MINUTE, prayTime.get(Calendar.MINUTE));
-        cal.set(Calendar.SECOND,0);
-        cal.set(Calendar.MILLISECOND,0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        //setting now calendar to compare
+        calnow.setTimeInMillis(System.currentTimeMillis());
+        calnow.set(Calendar.HOUR_OF_DAY, nowTime.get(Calendar.HOUR_OF_DAY));
+        calnow.set(Calendar.MINUTE, nowTime.get(Calendar.MINUTE));
+        calnow.set(Calendar.SECOND,0);
+        calnow.set(Calendar.MILLISECOND, 0);
+
         //setting alarm
-        AlarmManager alma = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        Intent FiveTime = new Intent(context, FiveTime.class);
-        PendingIntent pentent = PendingIntent.getBroadcast(context, n, FiveTime, PendingIntent.FLAG_UPDATE_CURRENT);
-        alma.set(AlarmManager.RTC_WAKEUP,cal.getTimeInMillis(),pentent);
-        Log.d("warong", "setAlarmEachPrayerTime: alarm at "+prayerTime+" setted");
+        if (cal.compareTo(calnow)!=-1){
+            AlarmManager alma = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+            Intent FiveTime = new Intent(context, FiveTime.class);
+            for (int i=0;i<5 ;i++ ){
+                if (i==n)
+                    FiveTime.putExtra("idSolat",solats[i]);
+            }
+            PendingIntent pentent = PendingIntent.getBroadcast(context, n, FiveTime, PendingIntent.FLAG_UPDATE_CURRENT);
+            alma.set(AlarmManager.RTC_WAKEUP,cal.getTimeInMillis(),pentent);
+            Log.d("warong", "setAlarmEachPrayerTime: alarm at "+prayerTime+" setted");
+        }
 
     }
 }
