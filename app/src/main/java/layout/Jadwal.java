@@ -1,24 +1,15 @@
 package layout;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.ComponentName;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
-import com.example.kucing.salim.AlertRecivier;
-import com.example.kucing.salim.BootReceiver;
 import com.example.kucing.salim.FetchJasoJSON;
 import com.example.kucing.salim.ItemJadwalSholat;
 import com.example.kucing.salim.JadwalSolatParser;
@@ -31,7 +22,6 @@ import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -131,31 +121,9 @@ public class Jadwal extends Fragment implements OnFragmentInteractionListener {
         daftar = (ListView) v.findViewById(R.id.Jaso);
         //execute the async task
         mTask.execute();
-        setFiveTimes(v.getContext());
 
 
         return v;
-    }
-
-    //alarm setter for setting each pray alarm
-    public static void setFiveTimes(Context context){
-        //unggal poe
-        Calendar cal = Calendar.getInstance();
-        cal.setTimeInMillis(System.currentTimeMillis());
-        cal.set(Calendar.HOUR_OF_DAY,20);
-
-        Intent alertIntent = new Intent(context, AlertRecivier.class);
-        AlarmManager alma = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        PendingIntent penten = PendingIntent.getBroadcast(context, 0, alertIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        alma.setInexactRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), AlarmManager.INTERVAL_DAY, penten);
-        Log.d("warong", "setFiveTimes: alarm limawaktu di set");
-        //agar tetap menyala ketia device di reboot
-        //error over here!
-        ComponentName receiver = new ComponentName(context, BootReceiver.class);
-        PackageManager pm = context.getPackageManager();
-        pm.setComponentEnabledSetting(receiver,
-                PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-                PackageManager.DONT_KILL_APP);
     }
 
 

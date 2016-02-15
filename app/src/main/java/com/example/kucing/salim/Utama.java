@@ -1,7 +1,12 @@
 package com.example.kucing.salim;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -109,7 +114,28 @@ public class Utama extends AppCompatActivity
             public void onClick(View v) {
             }
         });
+        setFiveTimes(this);
 
+    }
+
+    //alarm setter for setting each pray alarm
+    public static void setFiveTimes(Context context){
+        //unggal poe
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(System.currentTimeMillis());
+        cal.set(Calendar.HOUR_OF_DAY,0);
+
+        Intent alertIntent = new Intent(context, AlertRecivier.class);
+        AlarmManager alma = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        PendingIntent penten = PendingIntent.getBroadcast(context, 7, alertIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        alma.setInexactRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), AlarmManager.INTERVAL_DAY, penten);
+
+        ComponentName receiver = new ComponentName(context, BootReceiver.class);
+        PackageManager pm = context.getPackageManager();
+        pm.setComponentEnabledSetting(receiver,
+                PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                PackageManager.DONT_KILL_APP);
+        Log.d("warong", "setFiveTimes: sip");
     }
 
     @Override

@@ -15,7 +15,7 @@ public class BootReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         if (intent.getAction().equals("android.intent.action.BOOT_COMPLETED"));
-        Jadwal.setFiveTimes(context);
+        Utama.setFiveTimes(context);
         Log.d("warong", "onReceive: abis diboot terus diset alarmnya");
     }
 }

@@ -51,5 +51,19 @@ public class JadwalSolatParser {
         harian.add(temp);
         return new jadwalSholatAdapter(act,harian,res);
     }
+    //getting prayer time from
+    public static String[] getArrayJaso(String jason, String i) throws JSONException{
+        String jaso[] = new String[5];
+        JSONObject satubulanj = new JSONObject(jason);
+        JSONObject harianj = satubulanj.getJSONObject(i);
+
+        jaso[0]= harianj.getString("fajr");
+        jaso[1]= harianj.getString("zuhr");
+        jaso[2]= harianj.getString("asr");
+        jaso[3]= harianj.getString("maghrib");
+        jaso[4]= harianj.getString("isha");
+
+        return jaso;
+    }
 
 }
