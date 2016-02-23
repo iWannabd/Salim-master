@@ -9,8 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.Toast;
 
-import com.example.kucing.salim.FetchJasoJSON;
 import com.example.kucing.salim.ItemJadwalSholat;
 import com.example.kucing.salim.JadwalSolatParser;
 import com.example.kucing.salim.OnFragmentInteractionListener;
@@ -18,11 +18,13 @@ import com.example.kucing.salim.R;
 import com.example.kucing.salim.jadwalSholatAdapter;
 
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -37,21 +39,13 @@ public class Jadwal extends Fragment implements OnFragmentInteractionListener {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    public ListView daftar;
-    jadwalSholatAdapter adapter;
-    public Jadwal jawa = null;
-    public ArrayList<ItemJadwalSholat> Jaso = new ArrayList<>();
-    FetchJasoJSON mTask;
-    SharedPreferences SharePref;
-    JSONObject harian,bulanan;
-    SimpleDateFormat sdf = new SimpleDateFormat("M/yyyy");
-    SimpleDateFormat df = new SimpleDateFormat("d");
-    String expire_jason = sdf.format(new Date());
+
 
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
     final String TAG = "whats wrong";
+    String expire_jason = new SimpleDateFormat("M/yyyy").format(new Date());
 
     private OnFragmentInteractionListener mListener;
 
@@ -87,45 +81,31 @@ public class Jadwal extends Fragment implements OnFragmentInteractionListener {
         }
 
     }
-    //I.S string json
-    //F.S Jaso diisi dengna objek ItemJadwalSholat
-    public void setListData(String jason_string) throws JSONException {
-        adapter = JadwalSolatParser.getAdapter(jason_string,df.format(new Date()),getResources(),getActivity());
-        daftar.setAdapter(adapter);
-        mListener.setNowDate(expire_jason, adapter.getData());
-    }
 
-    public void simpanJason(String Jaso){
-        //berguna untuk menyimpan json string
-        SharePref = this.getActivity().getSharedPreferences("Jaso", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = SharePref.edit();
-        editor.putString(expire_jason, Jaso);
-        editor.apply();
-    }
-
-    public String bacaJason(){
-        SharePref = getActivity().getSharedPreferences("Jaso", Context.MODE_PRIVATE);
-        String default_jaso = getResources().getString(R.string.default_jaso);
-        return SharePref.getString(expire_jason,default_jaso);
-    }
-
+    @Bind(R.id.Jaso) ListView jaso;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        jawa = this;
         View v = inflater.inflate(R.layout.fragment_jadwal, container, false);
-        //create an instance of FetchJasoJSON
-        mTask = new FetchJasoJSON(this);
-        daftar = (ListView) v.findViewById(R.id.Jaso);
-        //execute the async task
-        mTask.execute();
-
-
+        ButterKnife.bind(this, v);
+        SharedPreferences shape = getActivity().getSharedPreferences("Jaso", Context.MODE_PRIVATE);
+        String dayoftoday = new SimpleDateFormat("dd").format(new Date());
+        String Jason = shape.getString(expire_jason, "Empty");
+        if (!Jason.equals("Empty")) {
+            try {
+                jadwalSholatAdapter adapter = JadwalSolatParser.getAdapter(Jason, dayoftoday, getResources(), getActivity());
+                jaso.setAdapter(adapter);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        } else {
+            Toast.makeText(getContext(),"Tidak Berhasil Mendapatkan Jadwal Sholat Terbaru",Toast.LENGTH_LONG).show();
+        }
+        jadwalSholatAdapter adapter = (jadwalSholatAdapter) jaso.getAdapter();
+        mListener.ChangeAllAboutHeader(adapter.getData());
         return v;
     }
-
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
@@ -145,7 +125,6 @@ public class Jadwal extends Fragment implements OnFragmentInteractionListener {
         }
     }
 
-
     @Override
     public void onDetach() {
         super.onDetach();
@@ -157,11 +136,9 @@ public class Jadwal extends Fragment implements OnFragmentInteractionListener {
     }
 
     @Override
-    public void setNowDate(String te, ArrayList<ItemJadwalSholat> jaso) {
+    public void ChangeAllAboutHeader(ArrayList<ItemJadwalSholat> jaso) {
 
     }
-
-
 
     /**
      * This interface must be implemented by activities that contain this

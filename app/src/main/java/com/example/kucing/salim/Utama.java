@@ -1,5 +1,7 @@
 package com.example.kucing.salim;
 
+import android.app.ActionBar;
+import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.ComponentName;
@@ -7,7 +9,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.database.sqlite.SQLiteDatabase;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.TabLayout;
@@ -21,7 +27,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -30,7 +38,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -60,6 +67,8 @@ public class Utama extends AppCompatActivity
     @Bind(R.id.now_date) TextView now_date;
     @Bind(R.id.next_pray) TextView next_pray;
     @Bind(R.id.user_name) TextView username;
+    @Bind(R.id.mainheader) ImageView header;
+    @Bind(R.id.headericon) ImageView hicon;
     SimpleDateFormat waktu = new SimpleDateFormat("HH:mm");
 
     @Override
@@ -242,16 +251,17 @@ public class Utama extends AppCompatActivity
     }
 
     @Override
-    public void setNowDate(String te,ArrayList<ItemJadwalSholat> jaso) {
+    public void ChangeAllAboutHeader(ArrayList<ItemJadwalSholat> jaso) {
         //used for change the main text in the main activity
         try {
             Date a = waktu.parse(waktu.format(new Date()));
             Date[] b = new Date[5];
             for (int i=0;i<5;i++){
                 b[i] = waktu.parse(jaso.get(i).getWaktuna());
-                Log.d("wrong", "setNowDate: "+b[i]);
+                Log.d("wrong", "ChangeAllAboutHeader: "+b[i]);
             }
-            Log.d("wrong", "setNowDate: "+a);
+            Log.d("wrong", "ChangeAllAboutHeader: "+a);
+            //mengganti tulisan header
             if (a.before(b[1])&&a.after(b[0])) {
                 now_date.setText(jaso.get(1).getWaktuna());
                 next_pray.setText(jaso.get(1).getSolatna());
@@ -272,6 +282,32 @@ public class Utama extends AppCompatActivity
                 now_date.setText(jaso.get(0).getWaktuna());
                 next_pray.setText(jaso.get(0).getSolatna());
             }
+            //mengganti gambar header
+            if (a.after(b[0]) && a.before(b[3])){
+                header.setImageResource(R.drawable.headerbh);
+                hicon.setImageResource(R.drawable.day_big);
+                ActionBar bar = getActionBar();
+                if (bar != null) {
+                    bar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorPrimaryDay)));
+                }
+                Window win = this.getWindow();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    win.setStatusBarColor(getResources().getColor(R.color.colorPrimaryDarkDay));
+                }
+            }
+            if (a.after(b[3]) || a.before(b[0])){
+                header.setImageResource(R.drawable.headerbg);
+                hicon.setImageResource(R.drawable.night_big);
+                ActionBar bar = getActionBar();
+                if (bar != null) {
+                    bar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorPrimary)));
+                }
+                Window win = this.getWindow();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    win.setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
+                }
+            }
+
 
         } catch (ParseException e) {
             e.printStackTrace();

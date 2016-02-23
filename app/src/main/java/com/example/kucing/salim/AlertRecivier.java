@@ -5,6 +5,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v4.content.WakefulBroadcastReceiver;
 import android.util.Log;
 import android.widget.Toast;
@@ -22,19 +23,20 @@ import java.util.Date;
 public class AlertRecivier extends WakefulBroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
+        String[] AlarmKey = {"subuh_alarm","dzuhr_alarm","ashar_alarm","maghrib_alarm","isya_alarm"};
+        SharedPreferences notif = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences sape = context.getSharedPreferences("Jaso", Context.MODE_PRIVATE);
         String expired_jason = new SimpleDateFormat("M/yyyy").format(new Date());
         String today_date = new SimpleDateFormat("d").format(new Date());
         try {
             String[] today_prayer_time = JadwalSolatParser.getArrayJaso(sape.getString(expired_jason,"Empty"),today_date);
             for (int i=0;i<5;i++){
-                setAlarmEachPrayerTime(today_prayer_time[i],context,i);
+                if (notif.getBoolean(AlarmKey[i],true))
+                    setAlarmEachPrayerTime(today_prayer_time[i],context,i);
             }
         } catch (JSONException | ParseException e) {
             e.printStackTrace();
         }
-
-
     }
 
     public void setAlarmEachPrayerTime(String prayerTime,Context context, int n) throws ParseException {
@@ -68,14 +70,12 @@ public class AlertRecivier extends WakefulBroadcastReceiver {
             AlarmManager alma = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
             Intent FiveTime = new Intent(context, FiveTime.class);
             for (int i=0;i<5 ;i++ ){
-                if (i==n)
-                    FiveTime.putExtra("idSolat",solats[i]);
+                if (i==n) FiveTime.putExtra("idSolat",solats[i]);
             }
             PendingIntent pentent = PendingIntent.getBroadcast(context, n, FiveTime, PendingIntent.FLAG_UPDATE_CURRENT);
             alma.set(AlarmManager.RTC_WAKEUP,cal.getTimeInMillis(),pentent);
             Log.d("warong", "setAlarmEachPrayerTime: alarm at "+prayerTime+" setted");
         }
-
     }
 }
 

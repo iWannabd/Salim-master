@@ -10,6 +10,12 @@
             android:summary="masukan nama anda"
             android:key="username"/>
 
+        <com.example.kucing.salim.EstimasiWaktuSolat
+            android:summary="Atur estimasi waktu anda megnerjakan solat"
+            android:dialogLayout="@layout/dialog_minutepicker"
+            android:title="Estimasi Waktu Solat"
+            android:key="estimasiSolat"/>
+
     </PreferenceCategory>
     <PreferenceCategory
         android:title="Nyalakan Notifikasi Untuk"

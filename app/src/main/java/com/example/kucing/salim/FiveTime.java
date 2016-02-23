@@ -21,6 +21,7 @@ public class FiveTime extends WakefulBroadcastReceiver {
                 .setContentTitle("Sudah "+idSolat)
                 .setContentText("Solat Sekarang?");
         Intent resultIntent = new Intent(context,TowerBuilder.class);
+        resultIntent.putExtra("Solat",idSolat);
         PendingIntent pentent = PendingIntent.getActivity(context, 9, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         mBuilder.setContentIntent(pentent);
 

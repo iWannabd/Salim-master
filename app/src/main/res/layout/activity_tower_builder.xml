@@ -7,14 +7,24 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.kucing.salim.TowerBuilder">
+    tools:context="com.example.kucing.salim.TowerBuilder"
+    android:background="#48c3f4">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Bangun menara ahaha"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="00:00"
         android:id="@+id/textView2"
+        android:layout_below="@+id/circle"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:textColor="#ffffff"/>
+    <ImageView
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:id="@+id/circle"
+        android:background="@drawable/halfcircwhite"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
 </RelativeLayout>

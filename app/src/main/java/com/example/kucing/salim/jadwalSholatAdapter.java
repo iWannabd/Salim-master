@@ -23,7 +23,7 @@ public class jadwalSholatAdapter extends BaseAdapter {
     public Resources res;
     ItemJadwalSholat tempValues= null;
 
-    public jadwalSholatAdapter(Activity act, ArrayList<ItemJadwalSholat> al,Resources resLocal){
+    public jadwalSholatAdapter(Activity act, ArrayList<ItemJadwalSholat> al, Resources resLocal){
         activity = act;
         data = al;
         res = resLocal;

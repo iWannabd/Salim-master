@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<navigationModel
+  ns = "http://schemas.android.com?import=com.android.tools.idea.editors.navigation.model.*">
+  <locations  
+    class = "java.util.ArrayList">
+    <statePointEntry>
+      <state      
+        class = "com.android.tools.idea.editors.navigation.model.ActivityState"      
+        className = "com.example.kucing.salim.TowerBuilder"/>
+      <point      
+        x = "2303"      
+        y = "1792"/>
+    </statePointEntry>
+    <statePointEntry>
+      <state      
+        class = "com.android.tools.idea.editors.navigation.model.ActivityState"      
+        className = "com.example.kucing.salim.AboutUs"/>
+      <point      
+        x = "2380"      
+        y = "141"/>
+    </statePointEntry>
+    <statePointEntry>
+      <state      
+        class = "com.android.tools.idea.editors.navigation.model.ActivityState"      
+        className = "com.example.kucing.salim.Utama"/>
+      <point      
+        x = "297"      
+        y = "1155"/>
+    </statePointEntry>
+  </locations>
+</navigationModel>

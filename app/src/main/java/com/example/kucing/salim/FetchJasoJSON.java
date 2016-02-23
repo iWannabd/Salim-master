@@ -1,11 +1,7 @@
 package com.example.kucing.salim;
 
-import android.annotation.TargetApi;
+import android.content.Intent;
 import android.os.AsyncTask;
-import android.os.Build;
-import android.util.Log;
-
-import org.json.JSONException;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -13,22 +9,19 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Date;
 import java.text.SimpleDateFormat;
-import java.util.Objects;
-
-import layout.Jadwal;
+import java.util.Date;
 
 /**
  * Created by node06 on 26/01/2016.
  */
 public class FetchJasoJSON extends AsyncTask<String, Void, String> {
-    Jadwal container;
+    SplashScreen container;
     HttpURLConnection urlcon;
     SimpleDateFormat ye = new SimpleDateFormat("yyyy");
     SimpleDateFormat me = new SimpleDateFormat("M");
 
-    public FetchJasoJSON(Jadwal j){
+    public FetchJasoJSON(SplashScreen j){
         this.container = j;
     }
 
@@ -63,28 +56,22 @@ public class FetchJasoJSON extends AsyncTask<String, Void, String> {
         return result.toString();
     }
 
-
-
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
     }
 
-
-
     @Override
     protected void onPostExecute(String result){
-        if(container!=null && container.getActivity()!=null){
+        if(container != null){
             //dicek jika sudah ada json string atau sudah aoutdate maka
             //akan disimpan
             if ("Empty".equals(container.bacaJason())){
                 container.simpanJason(result);
             }
-            try {
-                container.setListData(container.bacaJason());
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+            Intent ActivityUtama = new Intent(container,Utama.class);
+            container.startActivity(ActivityUtama);
+            container.finish();
         }
         this.container = null;
     }

@@ -2,12 +2,10 @@ package layout;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +14,6 @@ import android.widget.TextView;
 
 import com.example.kucing.salim.ItemJadwalSholat;
 import com.example.kucing.salim.JadwalSolatParser;
-import com.example.kucing.salim.jadwalSholatAdapter;
 import com.prolificinteractive.materialcalendarview.*;
 
 import com.example.kucing.salim.OnFragmentInteractionListener;
@@ -157,7 +154,7 @@ public class Kalendar extends Fragment implements OnFragmentInteractionListener,
 
     //dari onfragment interaction listener
     @Override
-    public void setNowDate(String te, ArrayList<ItemJadwalSholat> jaso) {
+    public void ChangeAllAboutHeader(ArrayList<ItemJadwalSholat> jaso) {
 
     }
 

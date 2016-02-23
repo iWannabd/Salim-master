@@ -25,38 +25,31 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="Let&apos;s Share"
         android:id="@+id/shareit"
-        android:layout_gravity="center_vertical"
+        android:layout_marginTop="30dp"
+        android:layout_gravity="center_horizontal"
         android:drawableLeft="@drawable/sharebtn"
         />
 
-    <LinearLayout
-        android:layout_height="wrap_content"
+    <Button
+        style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
-        android:orientation="horizontal"
-        android:layout_gravity="center"
-        android:layout_marginTop="10dp">
-        <ImageButton
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:id="@+id/postfb"
-            android:layout_gravity="center_horizontal"
-            android:background="@drawable/post" />
+        android:layout_height="wrap_content"
+        android:text="New Button"
+        android:id="@+id/button"
+        android:layout_gravity="center_horizontal" />
 
-        <ImageButton
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:id="@+id/tweet"
-            android:layout_gravity="center_horizontal"
-            android:background="@drawable/tweet"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/editText"
+        android:layout_gravity="center_horizontal" />
 
-        <ImageButton
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:id="@+id/plus"
-            android:layout_gravity="center_horizontal"
-            android:background="@drawable/plus"/>
-    </LinearLayout>
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="masukan"
+        android:id="@+id/cek2"
+        android:layout_gravity="right" />
 
 </LinearLayout>

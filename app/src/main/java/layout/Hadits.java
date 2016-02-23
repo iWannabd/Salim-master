@@ -9,10 +9,12 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,9 +23,17 @@ import com.example.kucing.salim.AlertRecivier;
 import com.example.kucing.salim.ItemJadwalSholat;
 import com.example.kucing.salim.OnFragmentInteractionListener;
 import com.example.kucing.salim.R;
+import com.example.kucing.salim.StatsHandler;
+import com.example.kucing.salim.TowerBuilder;
+
+import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -77,19 +87,37 @@ public class Hadits extends Fragment implements OnFragmentInteractionListener {
         }
     }
 
-    TextView hadits;
-    Button shareit;
-    ImageButton fb,tw;
+    @Bind(R.id.hadits) TextView hadits;
+    @Bind(R.id.shareit) Button shareit;
+    @Bind(R.id.button) Button coba;
+    @Bind(R.id.cek2) Button cek2;
+    @Bind(R.id.editText) EditText masuk;
+
+    @OnClick(R.id.button)
+    public void coba(){
+        Intent i = new Intent(getContext(), TowerBuilder.class);
+        i.putExtra("Solat","cobacoba");
+        startActivity(i);
+    }
+
+    @OnClick(R.id.cek2)
+    public void cek2(){
+        try {
+            Editable a = masuk.getText();
+            StatsHandler halo = new StatsHandler(getContext());
+            halo.putSolat(a.toString());
+            masuk.setText(halo.cek());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_hadits, container, false);
-        hadits = (TextView) v.findViewById(R.id.hadits);
-        shareit = (Button) v.findViewById(R.id.shareit);
-        fb = (ImageButton) v.findViewById(R.id.postfb);
-        tw = (ImageButton) v.findViewById(R.id.tweet);
+        ButterKnife.bind(this,v);
 
         shareit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -102,21 +130,6 @@ public class Hadits extends Fragment implements OnFragmentInteractionListener {
             }
         });
 
-        fb.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setAlarm(v);
-            }
-        });
-
-        tw.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SharedPreferences sape = getActivity().getSharedPreferences("Jaso", Activity.MODE_PRIVATE);
-                String ha = sape.getString("2/2016","Empty");
-                Toast.makeText(getActivity(),ha,Toast.LENGTH_LONG).show();
-            }
-        });
 
         return v;
     }
@@ -170,7 +183,7 @@ public class Hadits extends Fragment implements OnFragmentInteractionListener {
     public void onFragmentInteraction(Uri uri){}
 
     @Override
-    public void setNowDate(String te, ArrayList<ItemJadwalSholat> jaso) {
+    public void ChangeAllAboutHeader(ArrayList<ItemJadwalSholat> jaso) {
 
     }
 
