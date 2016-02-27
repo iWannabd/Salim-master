@@ -1,11 +1,9 @@
 package layout;
 
-import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -15,9 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.kucing.salim.AlertRecivier;
 import com.example.kucing.salim.ItemJadwalSholat;
@@ -92,6 +88,7 @@ public class Hadits extends Fragment implements OnFragmentInteractionListener {
     @Bind(R.id.button) Button coba;
     @Bind(R.id.cek2) Button cek2;
     @Bind(R.id.editText) EditText masuk;
+    @Bind(R.id.textView5) TextView feedback;
 
     @OnClick(R.id.button)
     public void coba(){
@@ -102,14 +99,20 @@ public class Hadits extends Fragment implements OnFragmentInteractionListener {
 
     @OnClick(R.id.cek2)
     public void cek2(){
-        try {
-            Editable a = masuk.getText();
-            StatsHandler halo = new StatsHandler(getContext());
-            halo.putSolat(a.toString());
-            masuk.setText(halo.cek());
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        Editable a = masuk.getText();
+        StatsHandler statha = new StatsHandler(getContext());
+        statha.putSolat(a.toString());
+        feedback.setText(statha.getAll());
+    }
+
+    @OnClick(R.id.button2)
+    public void button2(){
+        Editable a = masuk.getText();
+        StatsHandler statha = null;
+        statha = new StatsHandler(getContext());
+        statha.putAll(a.toString());
+        feedback.setText(statha.getAll());
+
     }
 
     @Override
@@ -118,6 +121,8 @@ public class Hadits extends Fragment implements OnFragmentInteractionListener {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_hadits, container, false);
         ButterKnife.bind(this,v);
+
+        feedback.setText(new StatsHandler(getContext()).getAll());
 
         shareit.setOnClickListener(new View.OnClickListener() {
             @Override

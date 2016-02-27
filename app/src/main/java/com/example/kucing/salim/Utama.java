@@ -116,6 +116,8 @@ public class Utama extends AppCompatActivity
                     case 0:
                         startActivity(new Intent(Utama.this, AboutUs.class));
                         break;
+                    case 2:
+                        startActivity(new Intent(Utama.this,UserStats.class));
                 }
             }
 

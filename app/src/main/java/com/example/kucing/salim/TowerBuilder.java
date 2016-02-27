@@ -52,13 +52,9 @@ public class TowerBuilder extends AppCompatActivity {
 
             @Override
             public void onFinish() {
-                try {
-                    StatsHandler st = new StatsHandler(getBaseContext());
-                    st.putSolat(whatSolat);
-                    text.setText("Anda telah melaksanakan salat "+whatSolat+" tepat waktu");
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                StatsHandler st = new StatsHandler(getBaseContext());
+                st.putSolat(whatSolat);
+                text.setText("Anda telah melaksanakan salat "+whatSolat+" tepat waktu");
             }
         }.start();
     }
