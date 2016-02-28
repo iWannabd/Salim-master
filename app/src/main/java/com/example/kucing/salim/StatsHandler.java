@@ -61,6 +61,18 @@ public class StatsHandler {
         editor.putString("UserStat", json_string);
         editor.apply();
     }
+    //return solats that have completed by user of inputed date
+    public ArrayList<String> getSolat(Date date) throws JSONException {
+        ArrayList<String> result = new ArrayList<>();
+        JSONArray solats_of_selected_date = new JSONArray();
+        if (!json_string.equals("")){
+            solats_of_selected_date = dates.getJSONArray(dateFormat.format(date));
+            for (int i =0;i<solats_of_selected_date.length();i++){
+                result.add((String) solats_of_selected_date.get(i));
+            }
+        }
+        return result;
+    }
 
     public void putAll(String json){
         SharedPreferences.Editor editor = shaper.edit();
@@ -90,6 +102,16 @@ public class StatsHandler {
         return result;
     }
 
+    public ArrayList<Date> getDateRange(Date d){
+        ArrayList<Date> result = new ArrayList<>();
+        LocalDate startdate = new LocalDate(d);
+        LocalDate endate = startdate.plusDays(7);
+        for (LocalDate date = startdate; date.isBefore(endate); date = date.plusDays(1)){
+            result.add(date.toDate());
+        }
+        return result;
+    }
+
     public ArrayList<Date> getWeekRange() throws ParseException {
         Iterator<?> keys = dates.keys();
         ArrayList<Date> dates = new ArrayList<>();
@@ -97,16 +119,16 @@ public class StatsHandler {
             String key = (String) keys.next();
             dates.add(dateFormat.parse(key));
         }
-
         ArrayList<Date> weeks = new ArrayList<>();
         ArrayList<Date> lotofweeks = new ArrayList<>();
         Collections.sort(dates);
+        Log.d(TAG, "getWeekRange: dates "+dates);
         for(int l=0;l<dates.size();l++){
             lotofweeks.add(getEveryMonday(dates.get(l)));
         }
 
-        int i = 0;
-        if (!weeks.isEmpty()) {
+        if (!(lotofweeks.size()==0)) {
+            int i = 0;
             weeks.add(lotofweeks.get(i));
             while (i + 1 < lotofweeks.size()) {
                 if (!lotofweeks.get(i).equals(lotofweeks.get(i + 1)))

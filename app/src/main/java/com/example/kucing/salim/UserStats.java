@@ -57,9 +57,10 @@ public class UserStats extends AppCompatActivity {
 
     @OnClick(R.id.prev)
     public void prev(){
-        if (selected>0){
+        if (selected>-1){
             selected--;
             Log.d(TAG, "prev: "+selected);
+            if (selected == -1) selected = 0;
         } else {
             selected = 0;
         }
@@ -83,6 +84,7 @@ public class UserStats extends AppCompatActivity {
             e.printStackTrace();
         }
         weekrange_size = weekrange.size();
+        Log.d(TAG, "onCreate: weekrange "+weekrange);
         if (weekrange_size >0) selected = weekrange_size -1;
         else selected = 0;
         setChartData();
@@ -92,6 +94,7 @@ public class UserStats extends AppCompatActivity {
         if (!statsHandler.json_string.equals("")) {
             week = statsHandler.getWeeklyData(weekrange.get(selected));
             LocalDate monday_date = new LocalDate(weekrange.get(selected));
+            Log.d(TAG, "setChartData: "+selected);
             LocalDate sunday_date = monday_date.plusDays(7);
             range_date = day.print(monday_date) + "-" + day.print(sunday_date) + " " + month_year.format(new Date());
             date.setText(range_date);
