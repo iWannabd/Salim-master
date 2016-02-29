@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,7 +46,7 @@ public class Jadwal extends Fragment implements OnFragmentInteractionListener {
     private String mParam1;
     private String mParam2;
     final String TAG = "whats wrong";
-    String expire_jason = new SimpleDateFormat("M/yyyy").format(new Date());
+    public String expire_jason = new SimpleDateFormat("M/yyyy").format(new Date());
 
     private OnFragmentInteractionListener mListener;
 
@@ -90,9 +91,11 @@ public class Jadwal extends Fragment implements OnFragmentInteractionListener {
         View v = inflater.inflate(R.layout.fragment_jadwal, container, false);
         ButterKnife.bind(this, v);
         SharedPreferences shape = getActivity().getSharedPreferences("Jaso", Context.MODE_PRIVATE);
-        String dayoftoday = new SimpleDateFormat("dd").format(new Date());
+        String dayoftoday = new SimpleDateFormat("d").format(new Date());
         String Jason = shape.getString(expire_jason, "Empty");
+        Log.d(TAG, "onCreateView: "+expire_jason);
         if (!Jason.equals("Empty")) {
+            Log.d(TAG, "onCreateView: ekse "+Jason);
             try {
                 jadwalSholatAdapter adapter = JadwalSolatParser.getAdapter(Jason, dayoftoday, getResources(), getActivity());
                 jaso.setAdapter(adapter);

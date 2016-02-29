@@ -2,6 +2,7 @@ package com.example.kucing.salim;
 
 import android.app.Activity;
 import android.content.res.Resources;
+import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -20,7 +21,7 @@ public class JadwalSolatParser {
         ItemJadwalSholat temp = new ItemJadwalSholat();
         JSONObject satubulanj = new JSONObject(jason);
         JSONObject harianj;
-
+        Log.d("whats wrong", "getAdapter: "+i);
         harianj = satubulanj.getJSONObject(i);
         //mendapatkan setiap item solat
         //subuh
