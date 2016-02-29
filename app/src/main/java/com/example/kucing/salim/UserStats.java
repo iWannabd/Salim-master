@@ -1,9 +1,14 @@
 package com.example.kucing.salim;
 
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.BarData;
@@ -11,7 +16,9 @@ import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.formatter.ValueFormatter;
+import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 
 import org.joda.time.LocalDate;
@@ -34,12 +41,16 @@ public class UserStats extends AppCompatActivity {
     ArrayList<String> xva = new ArrayList<>();
     ArrayList<Date> weekrange = new ArrayList<>();
     ArrayList<Integer> week = new ArrayList<>();
+    ArrayList<Date> dates_of_week = new ArrayList<>();
+    ArrayList<String> solats = new ArrayList<>();
     StatsHandler statsHandler;
     String TAG = "HAH";
     DateTimeFormatter day =  DateTimeFormat.forPattern("d");
     SimpleDateFormat month_year =  new SimpleDateFormat("MMMM yyyy");
+    String meessage = "";
     String range_date;
-
+    int[] towers_images = {R.color.transparent,R.drawable.done1,R.drawable.done2,R.drawable.done3,R.drawable.done4,R.drawable.done};
+    ImageView towers;
 
     @Bind(R.id.chart) com.github.mikephil.charting.charts.BarChart chart;
     @Bind(R.id.date)TextView date;
@@ -67,6 +78,8 @@ public class UserStats extends AppCompatActivity {
         setChartData();
     }
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -76,7 +89,9 @@ public class UserStats extends AppCompatActivity {
         if (getSupportActionBar()!=null) {
             getSupportActionBar().hide();
         }
+
         statsHandler = new StatsHandler(getBaseContext());
+        towers = (ImageView) findViewById(R.id.towers);
 
         try {
             weekrange = statsHandler.getWeekRange();
@@ -93,6 +108,7 @@ public class UserStats extends AppCompatActivity {
     public void setChartData(){
         if (!statsHandler.json_string.equals("")) {
             week = statsHandler.getWeeklyData(weekrange.get(selected));
+            dates_of_week = statsHandler.getDateRange(weekrange.get(selected));
             LocalDate monday_date = new LocalDate(weekrange.get(selected));
             Log.d(TAG, "setChartData: "+selected);
             LocalDate sunday_date = monday_date.plusDays(7);
@@ -136,6 +152,27 @@ public class UserStats extends AppCompatActivity {
             chart.getAxisRight().setDrawLabels(false);
             chart.setDescription("");
             chart.getLegend().setEnabled(false);
+            chart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
+
+                @Override
+                public void onValueSelected(Entry e, int dataSetIndex, Highlight h) {
+                    Log.d(TAG, "onValueSelected: dipilih" + dataSetIndex);
+                    int t = (int) e.getVal();
+                    towers.setImageResource(towers_images[t]);
+                    Date d = dates_of_week.get(e.getXIndex());
+                    Log.d(TAG, "onValueSelected: dipilih" + d+" nilainya "+t);
+                    solats = statsHandler.solatsOfSpecificDate(d);
+                    Log.d(TAG, "onValueSelected: " + solats);
+                    meessage = "";
+                    for (int i=0;i<solats.size();i++) meessage = meessage + solats.get(i) + ", ";
+                    Toast.makeText(getBaseContext(),"Anda telah mengerjakan salat "+meessage+"tepat waktu",Toast.LENGTH_LONG).show();
+                }
+
+                @Override
+                public void onNothingSelected() {
+
+                }
+            });
             chart.invalidate();
         }
     }

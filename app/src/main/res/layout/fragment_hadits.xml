@@ -20,11 +20,12 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginRight="25dp"
+        android:layout_marginLeft="25dp"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="”Barang siapa yang melaksanakan shalat isya’ secara berjamaah maka ia seperti shalat malam separuh malam. Dan barang siapa melaksanakan shalat subuh secara berjamaah maka ia seperti shalat malam satu malam penuh.” (HR.Muslim)"
         android:id="@+id/hadits"
-        android:textAlignment="center"
-        android:textColor="#000000"/>
+        android:textAlignment="center"/>
 
     <Button
         android:layout_width="wrap_content"
@@ -32,45 +33,45 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="Let&apos;s Share"
         android:id="@+id/shareit"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:layout_gravity="center_horizontal"
         android:drawableLeft="@drawable/sharebtn"
         />
 
-    <Button
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="towebuilder"
-        android:id="@+id/button"
-        android:layout_gravity="center_horizontal" />
+    <!--<Button-->
+        <!--style="?android:attr/buttonStyleSmall"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="towebuilder"-->
+        <!--android:id="@+id/button"-->
+        <!--android:layout_gravity="center_horizontal" />-->
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/editText"
-        android:layout_gravity="center_horizontal" />
+    <!--<EditText-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:id="@+id/editText"-->
+        <!--android:layout_gravity="center_horizontal" />-->
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="putall"
-        android:id="@+id/button2" />
+    <!--<Button-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="putall"-->
+        <!--android:id="@+id/button2" />-->
 
-    <Button
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="putsolat"
-        android:id="@+id/cek2" />
+    <!--<Button-->
+        <!--style="?android:attr/buttonStyleSmall"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="putsolat"-->
+        <!--android:id="@+id/cek2" />-->
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="Small Text"
-        android:id="@+id/textView5"
-        android:layout_gravity="center_horizontal" />
+    <!--<TextView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:textAppearance="?android:attr/textAppearanceSmall"-->
+        <!--android:text="Small Text"-->
+        <!--android:id="@+id/textView5"-->
+        <!--android:layout_gravity="center_horizontal" />-->
 
 </LinearLayout>
 </ScrollView>

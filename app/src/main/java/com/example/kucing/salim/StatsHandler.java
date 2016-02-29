@@ -112,6 +112,20 @@ public class StatsHandler {
         return result;
     }
 
+    public ArrayList<String> solatsOfSpecificDate(Date d){
+        ArrayList<String> result = new ArrayList<>();
+        try {
+            JSONArray jso = dates.getJSONArray(dateFormat.format(d));
+            for(int i=0;i<jso.length();i++)
+                result.add((String) jso.get(i));
+        } catch (JSONException e) {
+            result.add("Anda Belum Solat Tepat Waktu");
+            e.printStackTrace();
+            return result;
+        }
+        return result;
+    }
+
     public ArrayList<Date> getWeekRange() throws ParseException {
         Iterator<?> keys = dates.keys();
         ArrayList<Date> dates = new ArrayList<>();
@@ -122,7 +136,7 @@ public class StatsHandler {
         ArrayList<Date> weeks = new ArrayList<>();
         ArrayList<Date> lotofweeks = new ArrayList<>();
         Collections.sort(dates);
-        Log.d(TAG, "getWeekRange: dates "+dates);
+        Log.d(TAG, "getWeekRange: dates " + dates);
         for(int l=0;l<dates.size();l++){
             lotofweeks.add(getEveryMonday(dates.get(l)));
         }

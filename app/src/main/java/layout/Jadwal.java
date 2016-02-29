@@ -96,14 +96,14 @@ public class Jadwal extends Fragment implements OnFragmentInteractionListener {
             try {
                 jadwalSholatAdapter adapter = JadwalSolatParser.getAdapter(Jason, dayoftoday, getResources(), getActivity());
                 jaso.setAdapter(adapter);
+                jadwalSholatAdapter adapterr = (jadwalSholatAdapter) jaso.getAdapter();
+                mListener.ChangeAllAboutHeader(adapterr.getData());
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         } else {
             Toast.makeText(getContext(),"Tidak Berhasil Mendapatkan Jadwal Sholat Terbaru",Toast.LENGTH_LONG).show();
         }
-        jadwalSholatAdapter adapter = (jadwalSholatAdapter) jaso.getAdapter();
-        mListener.ChangeAllAboutHeader(adapter.getData());
         return v;
     }
 

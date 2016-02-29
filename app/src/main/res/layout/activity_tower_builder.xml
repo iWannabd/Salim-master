@@ -16,15 +16,49 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="00:00"
         android:id="@+id/textView2"
+        android:layout_marginTop="40dp"
+        android:textColor="#ffffff"
         android:layout_below="@+id/circle"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        android:textColor="#ffffff"/>
+        android:layout_centerHorizontal="true" />
     <ImageView
         android:layout_width="200dp"
         android:layout_height="200dp"
         android:id="@+id/circle"
-        android:background="@drawable/halfcircwhite"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:background="@drawable/whitecirc"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="100dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Give Up"
+        android:id="@+id/giveup"
+        android:layout_below="@+id/textView2"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="45dp"
+        android:background="#1F8ECF"
+        android:textColor="#fff"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#fff"
+        android:text="Solat dlu yuk!"
+        android:id="@+id/asking"
+        android:layout_marginTop="50dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:textAlignment="center"/>
+
+    <ImageView
+        android:layout_width="175dp"
+        android:layout_height="175dp"
+        android:id="@+id/tower_stat"
+        android:background="@drawable/tower"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="113dp" />
+
 </RelativeLayout>

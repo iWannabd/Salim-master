@@ -85,35 +85,35 @@ public class Hadits extends Fragment implements OnFragmentInteractionListener {
 
     @Bind(R.id.hadits) TextView hadits;
     @Bind(R.id.shareit) Button shareit;
-    @Bind(R.id.button) Button coba;
-    @Bind(R.id.cek2) Button cek2;
-    @Bind(R.id.editText) EditText masuk;
-    @Bind(R.id.textView5) TextView feedback;
+//    @Bind(R.id.button) Button coba;
+//    @Bind(R.id.cek2) Button cek2;
+////    @Bind(R.id.editText) EditText masuk;
+//    @Bind(R.id.textView5) TextView feedback;
 
-    @OnClick(R.id.button)
-    public void coba(){
-        Intent i = new Intent(getContext(), TowerBuilder.class);
-        i.putExtra("Solat","cobacoba");
-        startActivity(i);
-    }
+//    @OnClick(R.id.button)
+//    public void coba(){
+//        Intent i = new Intent(getContext(), TowerBuilder.class);
+//        i.putExtra("Solat","cobacoba");
+//        startActivity(i);
+//    }
 
-    @OnClick(R.id.cek2)
-    public void cek2(){
-        Editable a = masuk.getText();
-        StatsHandler statha = new StatsHandler(getContext());
-        statha.putSolat(a.toString());
-        feedback.setText(statha.getAll());
-    }
+//    @OnClick(R.id.cek2)
+//    public void cek2(){
+//        Editable a = masuk.getText();
+//        StatsHandler statha = new StatsHandler(getContext());
+//        statha.putSolat(a.toString());
+//        feedback.setText(statha.getAll());
+//    }
 
-    @OnClick(R.id.button2)
-    public void button2(){
-        Editable a = masuk.getText();
-        StatsHandler statha = null;
-        statha = new StatsHandler(getContext());
-        statha.putAll(a.toString());
-        feedback.setText(statha.getAll());
-
-    }
+//    @OnClick(R.id.button2)
+//    public void button2(){
+//        Editable a = masuk.getText();
+//        StatsHandler statha = null;
+//        statha = new StatsHandler(getContext());
+//        statha.putAll(a.toString());
+//        feedback.setText(statha.getAll());
+//
+//    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -122,7 +122,7 @@ public class Hadits extends Fragment implements OnFragmentInteractionListener {
         View v = inflater.inflate(R.layout.fragment_hadits, container, false);
         ButterKnife.bind(this,v);
 
-        feedback.setText(new StatsHandler(getContext()).getAll());
+//        feedback.setText(new StatsHandler(getContext()).getAll());
 
         shareit.setOnClickListener(new View.OnClickListener() {
             @Override

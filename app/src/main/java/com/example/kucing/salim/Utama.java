@@ -84,6 +84,45 @@ public class Utama extends AppCompatActivity
         setContentView(R.layout.activity_utama);
         ButterKnife.bind(this);
 
+        //PUT DUMMY DATA
+//        StatsHandler sh = new StatsHandler(this);
+//        sh.putAll("{\n" +
+//                "\t\"24/02/2016\":\n" +
+//                "\t[\"subuh\",\"dzuhr\",\"ashar\",\"maghrib\",\"isya\"],\n" +
+//                "\t\"25/02/2016\":\n" +
+//                "\t[\"subuh\",\"dzuhr\",\"ashar\",\"maghrib\",\"isya\"],\n" +
+//                "\t\"26/02/2016\":\n" +
+//                "\t[\"subuh\",\"dzuhr\",\"maghrib\",\"isya\"],\n" +
+//                "\t\"27/02/2016\":\n" +
+//                "\t[\"subuh\",\"dzuhr\",\"ashar\",\"maghrib\",\"isya\"],\n" +
+//                "\t\"28/02/2016\":\n" +
+//                "\t[\"subuh\",\"dzuhr\",\"ashar\",\"isya\"],\n" +
+//                "\t\"29/02/2016\":\n" +
+//                "\t[\"subuh\",\"dzuhr\",\"ashar\",\"maghrib\",\"isya\"],\n" +
+//                "\t\"01/03/2016\":\n" +
+//                "\t[\"subuh\",\"dzuhr\",\"maghrib\",\"isya\"],\n" +
+//                "\t\"02/03/2016\":\n" +
+//                "\t[\"subuh\",\"dzuhr\",\"ashar\",\"maghrib\",\"isya\"],\n" +
+//                "\t\"03/03/2016\":\n" +
+//                "\t[\"subuh\",\"dzuhr\",\"ashar\",\"maghrib\"],\n" +
+//                "\t\"04/03/2016\":\n" +
+//                "\t[\"subuh\",\"ashar\",\"maghrib\"],\n" +
+//                "\t\"05/03/2016\":\n" +
+//                "\t[\"subuh\",\"dzuhr\",\"ashar\",\"maghrib\",\"isya\"],\n" +
+//                "\t\"06/03/2016\":\n" +
+//                "\t[\"subuh\",\"dzuhr\",\"ashar\",\"maghrib\",\"isya\"],\n" +
+//                "\t\"07/03/2016\":\n" +
+//                "\t[\"subuh\",\"dzuhr\",\"ashar\",\"maghrib\"],\n" +
+//                "\t\"08/03/2016\":\n" +
+//                "\t[\"dzuhr\",\"ashar\",\"maghrib\",\"isya\"],\n" +
+//                "\t\"09/03/2016\":\n" +
+//                "\t[\"subuh\",\"dzuhr\",\"ashar\",\"maghrib\",\"isya\"],\n" +
+//                "\t\"10/03/2016\":\n" +
+//                "\t[\"dzuhr\",\"ashar\",\"maghrib\",\"isya\"],\n" +
+//                "\t\"11/03/2016\":\n" +
+//                "\t[\"subuh\",\"dzuhr\",\"ashar\",\"maghrib\",\"isya\"]\n" +
+//                "}\n");
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         // Create the adapter that will return a fragment for each of the three
@@ -254,7 +293,7 @@ public class Utama extends AppCompatActivity
 
     @Override
     public void ChangeAllAboutHeader(ArrayList<ItemJadwalSholat> jaso) {
-        //used for change the main text in the main activity
+        //used for change the main timer in the main activity
         try {
             Date a = waktu.parse(waktu.format(new Date()));
             Date[] b = new Date[5];

@@ -3,14 +3,34 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.kucing.salim.UserStats">
+    tools:context="com.example.kucing.salim.UserStats"
+    >
 
-    <ImageView
+
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/imageView4"
-        android:adjustViewBounds="true"
-        android:src="@drawable/stats_heaser"/>
+        android:id="@+id/header"
+        android:background="#48c3f4">
+        <ImageView
+            android:layout_width="150dp"
+            android:layout_height="160dp"
+            android:adjustViewBounds="true"
+            android:layout_gravity="bottom|center"
+            android:layout_marginBottom="55dp"
+            android:id="@+id/towers"/>
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/imageView4"
+                android:adjustViewBounds="true"
+                android:src="@drawable/cloud"
+                android:paddingTop="120dp"/>
+        </FrameLayout>
+    </FrameLayout>
 
     <com.github.mikephil.charting.charts.BarChart
         android:id="@+id/chart"
@@ -18,18 +38,19 @@
         android:layout_height="match_parent"
         android:layout_marginLeft="32dp"
         android:layout_marginRight="32dp"
-        android:layout_marginBottom="25dp"
-        android:layout_marginTop="50dp"
-        android:layout_below="@+id/imageView4" />
+        android:layout_marginBottom="60dp"
+        android:layout_marginTop="0dp"
+        android:layout_below="@+id/header" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="1-7 Januari"
         android:id="@+id/date"
         android:layout_above="@+id/chart"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp"/>
 
     <ImageButton
         android:layout_width="wrap_content"
