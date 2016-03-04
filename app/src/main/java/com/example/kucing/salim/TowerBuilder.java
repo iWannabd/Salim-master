@@ -3,6 +3,9 @@ package com.example.kucing.salim;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.CountDownTimer;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
@@ -25,6 +28,8 @@ public class TowerBuilder extends AppCompatActivity {
     Boolean udah;
     TextView timer,ajakan;
     Button nyerah;
+    Ringtone alarm;
+    String whatSolat;
 
 //    @Bind(R.id.textView2)
 //    TextView timer;
@@ -39,33 +44,23 @@ public class TowerBuilder extends AppCompatActivity {
     @Bind(R.id.asking)
     TextView asking;
 
+    @Bind(R.id.confirm) Button yes;
+    @Bind(R.id.unconfirm) Button no;
 
     @OnClick(R.id.confirm)
     public void confirm(){
         startCounting();
+        alarm.stop();
     }
     @OnClick(R.id.unconfirm)
     public void unconvirm(){
-        finish();
+        builder.show();
+        alarm.stop();
     }
 
     protected void startCounting(){
         setContentView(R.layout.activity_tower_builder);
-        //setting the dialog
-        builder = new AlertDialog.Builder(TowerBuilder.this);
-        builder.setMessage("Anda yakin tidak ingin solat tepat waktu?");
-        builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                finish();
-            }
-        });
-        builder.setNegativeButton("Tidak", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
+
         ImageView circ = (ImageView) findViewById(R.id.circle);
         timer = (TextView) findViewById(R.id.textView2);
         ajakan = (TextView) findViewById(R.id.asking);
@@ -85,7 +80,6 @@ public class TowerBuilder extends AppCompatActivity {
         RotateAnimation rotasi = new RotateAnimation(180,0,Animation.RELATIVE_TO_SELF,0.5f,Animation.RELATIVE_TO_SELF,0.5f);
         rotasi.setDuration(EstimatedTime);
         circ.startAnimation(rotasi);
-        final String whatSolat = getIntent().getStringExtra("Solat");
         new CountDownTimer(EstimatedTime,1000){
 
             @Override
@@ -113,8 +107,31 @@ public class TowerBuilder extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tower_builder_asking);
         ButterKnife.bind(this);
+
+        whatSolat = getIntent().getStringExtra("Solat");
+        asking.setText("Sudah waktunya solat "+whatSolat+" \n Solat sekarang?");
+        Uri notif = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
+        alarm = RingtoneManager.getRingtone(getApplicationContext(),notif);
+        alarm.play();
+
+        //setting the dialog
+        builder = new AlertDialog.Builder(TowerBuilder.this);
+        builder.setMessage("Anda yakin tidak ingin solat tepat waktu?");
+        builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+            }
+        });
+        builder.setNegativeButton("Tidak", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
         udah = false;
-        new CountDownTimer(1*60*1000,1000){
+        new CountDownTimer(5  * 1000,1000){
 
             @Override
             public void onTick(long millisUntilFinished) {
@@ -126,7 +143,12 @@ public class TowerBuilder extends AppCompatActivity {
 
             @Override
             public void onFinish() {
-                asking.setText("Anda Terlambat :(");
+                asking.setText("Anda Terlambat Solat "+whatSolat);
+                alarm.stop();
+                udah = true;
+                down.setText("");
+                yes.setVisibility(View.GONE);
+                no.setVisibility(View.GONE);
             }
         }.start();
 
@@ -142,13 +164,17 @@ public class TowerBuilder extends AppCompatActivity {
 
         if (keyCode == KeyEvent.KEYCODE_BACK ) {
             // do something
-            if (!udah) builder.show();
+            if (!udah) {
+                builder.show();
+                alarm.stop();
+            }
             else finish();
             return false;
         }
 
         if (keyCode == KeyEvent.KEYCODE_HOME){
             builder.show();
+            alarm.stop();
             return false;
         }
 

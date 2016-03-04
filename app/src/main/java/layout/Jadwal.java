@@ -103,9 +103,9 @@ public class Jadwal extends Fragment implements OnFragmentInteractionListener {
                 mListener.ChangeAllAboutHeader(adapterr.getData());
             } catch (JSONException e) {
                 e.printStackTrace();
+                Toast.makeText(getContext(),"Tidak Berhasil Mendapatkan Jadwal Sholat Terbaru",Toast.LENGTH_LONG).show();
             }
         } else {
-            Toast.makeText(getContext(),"Tidak Berhasil Mendapatkan Jadwal Sholat Terbaru",Toast.LENGTH_LONG).show();
         }
         return v;
     }

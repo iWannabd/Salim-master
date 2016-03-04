@@ -90,12 +90,12 @@ public class Hadits extends Fragment implements OnFragmentInteractionListener {
 ////    @Bind(R.id.editText) EditText masuk;
 //    @Bind(R.id.textView5) TextView feedback;
 
-//    @OnClick(R.id.button)
-//    public void coba(){
-//        Intent i = new Intent(getContext(), TowerBuilder.class);
-//        i.putExtra("Solat","cobacoba");
-//        startActivity(i);
-//    }
+    @OnClick(R.id.button)
+    public void coba(){
+        Intent i = new Intent(getContext(), TowerBuilder.class);
+        i.putExtra("Solat","cobacoba");
+        startActivity(i);
+    }
 
 //    @OnClick(R.id.cek2)
 //    public void cek2(){
