@@ -30,6 +30,7 @@ public class TowerBuilder extends AppCompatActivity {
     Button nyerah;
     Ringtone alarm;
     String whatSolat;
+    CountDownTimer cdt;
 
 //    @Bind(R.id.textView2)
 //    TextView timer;
@@ -80,7 +81,7 @@ public class TowerBuilder extends AppCompatActivity {
         RotateAnimation rotasi = new RotateAnimation(180,0,Animation.RELATIVE_TO_SELF,0.5f,Animation.RELATIVE_TO_SELF,0.5f);
         rotasi.setDuration(EstimatedTime);
         circ.startAnimation(rotasi);
-        new CountDownTimer(EstimatedTime,1000){
+        cdt = new CountDownTimer(EstimatedTime,1000){
 
             @Override
             public void onTick(long millisUntilFinished) {
@@ -99,7 +100,8 @@ public class TowerBuilder extends AppCompatActivity {
                 udah = true;
                 nyerah.setVisibility(View.GONE);
             }
-        }.start();
+        };
+        cdt.start();
     }
 
     @Override
@@ -179,6 +181,12 @@ public class TowerBuilder extends AppCompatActivity {
         }
 
         return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public void onDestroy(){
+        cdt.cancel();
+        super.onDestroy();
     }
 
 }
