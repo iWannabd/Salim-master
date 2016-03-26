@@ -133,7 +133,7 @@ public class TowerBuilder extends AppCompatActivity {
         });
 
         udah = false;
-        new CountDownTimer(5  * 1000,1000){
+        new CountDownTimer(60  * 1000,1000){
 
             @Override
             public void onTick(long millisUntilFinished) {

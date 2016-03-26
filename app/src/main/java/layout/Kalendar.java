@@ -6,14 +6,18 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.kucing.salim.ItemJadwalSholat;
 import com.example.kucing.salim.JadwalSolatParser;
+import com.example.kucing.salim.PrayTime;
+import com.example.kucing.salim.jadwalSholatAdapter;
 import com.prolificinteractive.materialcalendarview.*;
 
 import com.example.kucing.salim.OnFragmentInteractionListener;
@@ -49,8 +53,6 @@ public class Kalendar extends Fragment implements OnFragmentInteractionListener,
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
-    public ArrayList<ItemJadwalSholat> CustomListViewValuesArr = new ArrayList<>();
-    JSONObject harian,bulanan;
     public Date selectedDate;
     SimpleDateFormat d = new SimpleDateFormat("d");
 
@@ -96,13 +98,7 @@ public class Kalendar extends Fragment implements OnFragmentInteractionListener,
         View v = inflater.inflate(R.layout.fragment_kalendar, container, false);
         ButterKnife.bind(this, v);
         kalendar.setOnDateChangedListener(this);
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(new Date());
-        cal.set(Calendar.DATE, cal.getActualMaximum(Calendar.DATE));
-        kalendar.setMaximumDate(cal);
-        cal.setTime(new Date());
-        cal.set(Calendar.DAY_OF_MONTH, 1);
-        kalendar.setMinimumDate(cal);
+
         kalendar.setDateSelected(new Date(), true);
 
         return v;
@@ -132,10 +128,26 @@ public class Kalendar extends Fragment implements OnFragmentInteractionListener,
         super.onDetach();
         mListener = null;
     }
+    jadwalSholatAdapter adapter;
+    ArrayList<String> PrayTimesSet;
 
-    public void setListData(String jason_string) throws JSONException {
+
+    public void setListData() {
         daftar = (ListView) this.getActivity().findViewById(R.id.jasoall);
-        daftar.setAdapter(JadwalSolatParser.getAdapter(jason_string,d.format(selectedDate),getResources(),getActivity()));
+
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("location",Context.MODE_PRIVATE);
+
+        Double deflat = -6.9147;
+        Float lat = sharedPreferences.getFloat("latloc", deflat.floatValue());
+
+        Double deflon = 107.6098;
+        Float lon = sharedPreferences.getFloat("lonloc", deflon.floatValue());
+
+        Log.d("loc", "setListData: " + lat.floatValue() + " " + lon.floatValue());
+
+        PrayTimesSet = PrayTime.getFiveTimes(lon, lat, selectedDate);
+        adapter = JadwalSolatParser.getAdapter(PrayTimesSet, getResources(), getActivity());
+        daftar.setAdapter(adapter);
     }
 
     /**
@@ -152,26 +164,17 @@ public class Kalendar extends Fragment implements OnFragmentInteractionListener,
 
     }
 
-    //dari onfragment interaction listener
-    @Override
-    public void ChangeAllAboutHeader(ArrayList<ItemJadwalSholat> jaso) {
 
-    }
+
 
 
 //dari kalendar material
     @Override
     public void onDateSelected(@NonNull MaterialCalendarView widget,@NonNull CalendarDay date, boolean selected) {
         selectedDate = kalendar.getSelectedDate().getDate();
-        SharedPreferences sape = getActivity().getSharedPreferences("Jaso",Context.MODE_PRIVATE);
-        String jason = sape.getString(new SimpleDateFormat("M/yyyy").format(new Date()),"Empty");
-        try {
-            if (!jason.equals("Empty")){
-                setListData(jason);
-                jasonow.setText("Jadwal Sholat Tanggal "+d.format(selectedDate));
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        setListData();
+        jasonow.setText("Jadwal Sholat Tanggal "+d.format(selectedDate));
+
+
     }
 }

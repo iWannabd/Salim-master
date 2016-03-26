@@ -35,6 +35,7 @@ public class DrawerMenu extends ArrayAdapter<String> {
         if (s.equals("About")) gambar.setImageResource(R.drawable.ic_info_outline_white_24dp);
         if (s.equals("Preference")) gambar.setImageResource(R.drawable.ic_settings_white_24dp);
         if (s.equals("Statistic")) gambar.setImageResource(R.drawable.ic_insert_chart_white_24dp);
+        if (s.equals("Set Location")) gambar.setImageResource(R.drawable.ic_action_maps_map);
 
         return rowView;
     }

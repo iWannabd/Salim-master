@@ -187,10 +187,7 @@ public class Hadits extends Fragment implements OnFragmentInteractionListener {
 
     public void onFragmentInteraction(Uri uri){}
 
-    @Override
-    public void ChangeAllAboutHeader(ArrayList<ItemJadwalSholat> jaso) {
 
-    }
 
 
 

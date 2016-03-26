@@ -16,54 +16,36 @@ public class JadwalSolatParser {
 
 
 //    mendapatkan jadwalshoaltadapeter dari inputan tanggal
-    public static jadwalSholatAdapter getAdapter(String jason,String i,Resources res,Activity act) throws JSONException {
+    public static jadwalSholatAdapter getAdapter(ArrayList<String> jaso,Resources res,Activity act){
         ArrayList<ItemJadwalSholat> harian = new ArrayList<>();
         ItemJadwalSholat temp = new ItemJadwalSholat();
-        JSONObject satubulanj = new JSONObject(jason);
-        JSONObject harianj;
-        Log.d("whats wrong", "getAdapter: "+i);
-        harianj = satubulanj.getJSONObject(i);
         //mendapatkan setiap item solat
         //subuh
         temp.setSolatna("Subuh");
-        temp.setWaktuna(harianj.getString("fajr"));
+        temp.setWaktuna(jaso.get(0));
         temp.setImage(R.drawable.night);
         harian.add(temp);temp = new ItemJadwalSholat();
         //dzuhur
         temp.setSolatna("Dzuhr");
-        temp.setWaktuna(harianj.getString("zuhr"));
+        temp.setWaktuna(jaso.get(1));
         temp.setImage(R.drawable.day);
         harian.add(temp);temp = new ItemJadwalSholat();
         //asr
         temp.setSolatna("Ashar");
-        temp.setWaktuna(harianj.getString("asr"));
+        temp.setWaktuna(jaso.get(2));
         temp.setImage(R.drawable.day);
         harian.add(temp);temp = new ItemJadwalSholat();
         //maghrib
         temp.setSolatna("Maghrib");
-        temp.setWaktuna(harianj.getString("maghrib"));
+        temp.setWaktuna(jaso.get(3));
         temp.setImage(R.drawable.night);
         harian.add(temp);temp = new ItemJadwalSholat();
         //isha
         temp.setSolatna("Isya");
-        temp.setWaktuna(harianj.getString("isha"));
+        temp.setWaktuna(jaso.get(4));
         temp.setImage(R.drawable.night);
         harian.add(temp);
         return new jadwalSholatAdapter(act,harian,res);
-    }
-    //getting prayer time from
-    public static String[] getArrayJaso(String jason, String i) throws JSONException{
-        String jaso[] = new String[5];
-        JSONObject satubulanj = new JSONObject(jason);
-        JSONObject harianj = satubulanj.getJSONObject(i);
-
-        jaso[0]= harianj.getString("fajr");
-        jaso[1]= harianj.getString("zuhr");
-        jaso[2]= harianj.getString("asr");
-        jaso[3]= harianj.getString("maghrib");
-        jaso[4]= harianj.getString("isha");
-
-        return jaso;
     }
 
 }

@@ -39,7 +39,6 @@ public class EstimasiWaktuSolat extends DialogPreference implements SeekBar.OnSe
         currvalue.setText(getSharedPreferences().getInt(getKey(),0)+" menit");
         sb.setMax(30);
         sb.setOnSeekBarChangeListener(this);
-        Log.d("halo", "onBindDialogView: ");
     }
 
 

@@ -20,21 +20,8 @@ public class SplashScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
-        FetchJasoJSON mTask = new FetchJasoJSON(this);
-        mTask.execute();
-}
-
-    public void simpanJason(String Jaso){
-        //berguna untuk menyimpan json string
-        SharePref = this.getSharedPreferences("Jaso", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = SharePref.edit();
-        editor.putString(expire_jason, Jaso);
-        editor.apply();
+        Intent go = new Intent(this,Utama.class);
+        startActivity(go);
     }
 
-    public String bacaJason(){
-        SharePref = this.getSharedPreferences("Jaso", Context.MODE_PRIVATE);
-        String default_jaso = getResources().getString(R.string.default_jaso);
-        return SharePref.getString(expire_jason,default_jaso);
-    }
 }

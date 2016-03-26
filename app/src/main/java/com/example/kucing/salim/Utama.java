@@ -9,9 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -20,6 +18,8 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -32,6 +32,15 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlacePicker;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -50,12 +59,12 @@ public class Utama extends AppCompatActivity
 
 
     /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
+     * The {@link PagerAdapter} that will provide
      * fragments for each of the sections. We use a
      * {@link FragmentPagerAdapter} derivative, which will keep every
      * loaded fragment in memory. If this becomes too memory intensive, it
      * may be best to switch to a
-     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
+     * {@link FragmentStatePagerAdapter}.
      */
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
@@ -64,15 +73,27 @@ public class Utama extends AppCompatActivity
      */
     private ViewPager mViewPager;
 
-    @Bind(R.id.now_date) TextView now_date;
-    @Bind(R.id.next_pray) TextView next_pray;
-    @Bind(R.id.user_name) TextView username;
-    @Bind(R.id.mainheader) ImageView header;
-    @Bind(R.id.headericon) ImageView hicon;
+    final int PLACE_PICKER_REQUEST = 1;
+
+    @Bind(R.id.now_date)
+    TextView now_date;
+    @Bind(R.id.next_pray)
+    TextView next_pray;
+    @Bind(R.id.user_name)
+    TextView username;
+    @Bind(R.id.mainheader)
+    ImageView header;
+    @Bind(R.id.headericon)
+    ImageView hicon;
     SimpleDateFormat waktu = new SimpleDateFormat("HH:mm");
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient client;
 
     @Override
-    protected void onResume(){
+    protected void onResume() {
         super.onResume();
         SharedPreferences getGeneralPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         username.setText(getGeneralPrefs.getString("username", "Hamba Allah"));
@@ -84,44 +105,7 @@ public class Utama extends AppCompatActivity
         setContentView(R.layout.activity_utama);
         ButterKnife.bind(this);
 
-        //PUT DUMMY DATA
-//        StatsHandler sh = new StatsHandler(this);
-//        sh.putAll("{\n" +
-//                "\t\"24/02/2016\":\n" +
-//                "\t[\"subuh\",\"dzuhr\",\"ashar\",\"maghrib\",\"isya\"],\n" +
-//                "\t\"25/02/2016\":\n" +
-//                "\t[\"subuh\",\"dzuhr\",\"ashar\",\"maghrib\",\"isya\"],\n" +
-//                "\t\"26/02/2016\":\n" +
-//                "\t[\"subuh\",\"dzuhr\",\"maghrib\",\"isya\"],\n" +
-//                "\t\"27/02/2016\":\n" +
-//                "\t[\"subuh\",\"dzuhr\",\"ashar\",\"maghrib\",\"isya\"],\n" +
-//                "\t\"28/02/2016\":\n" +
-//                "\t[\"subuh\",\"dzuhr\",\"ashar\",\"isya\"],\n" +
-//                "\t\"29/02/2016\":\n" +
-//                "\t[\"subuh\",\"dzuhr\",\"ashar\",\"maghrib\",\"isya\"],\n" +
-//                "\t\"01/03/2016\":\n" +
-//                "\t[\"subuh\",\"dzuhr\",\"maghrib\",\"isya\"],\n" +
-//                "\t\"02/03/2016\":\n" +
-//                "\t[\"subuh\",\"dzuhr\",\"ashar\",\"maghrib\",\"isya\"],\n" +
-//                "\t\"03/03/2016\":\n" +
-//                "\t[\"subuh\",\"dzuhr\",\"ashar\",\"maghrib\"],\n" +
-//                "\t\"04/03/2016\":\n" +
-//                "\t[\"subuh\",\"ashar\",\"maghrib\"],\n" +
-//                "\t\"05/03/2016\":\n" +
-//                "\t[\"subuh\",\"dzuhr\",\"ashar\",\"maghrib\",\"isya\"],\n" +
-//                "\t\"06/03/2016\":\n" +
-//                "\t[\"subuh\",\"dzuhr\",\"ashar\",\"maghrib\",\"isya\"],\n" +
-//                "\t\"07/03/2016\":\n" +
-//                "\t[\"subuh\",\"dzuhr\",\"ashar\",\"maghrib\"],\n" +
-//                "\t\"08/03/2016\":\n" +
-//                "\t[\"dzuhr\",\"ashar\",\"maghrib\",\"isya\"],\n" +
-//                "\t\"09/03/2016\":\n" +
-//                "\t[\"subuh\",\"dzuhr\",\"ashar\",\"maghrib\",\"isya\"],\n" +
-//                "\t\"10/03/2016\":\n" +
-//                "\t[\"dzuhr\",\"ashar\",\"maghrib\",\"isya\"],\n" +
-//                "\t\"11/03/2016\":\n" +
-//                "\t[\"subuh\",\"dzuhr\",\"ashar\",\"maghrib\",\"isya\"]\n" +
-//                "}\n");
+
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -129,7 +113,7 @@ public class Utama extends AppCompatActivity
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         //hide toolbar
-        if (getSupportActionBar()!=null)
+        if (getSupportActionBar() != null)
             getSupportActionBar().hide();
 
         // Set up the ViewPager with the sections adapter.
@@ -141,7 +125,7 @@ public class Utama extends AppCompatActivity
         // Set up the drawer menu for setting and about activity
         SharedPreferences getGeneralPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         username.setText(getGeneralPrefs.getString("example_text", "Hamba Allah"));
-        String[] prefmen = {"About","Preference", "Statistic"};
+        String[] prefmen = {"About", "Preference", "Statistic","Set Location"};
         ListView prefMenu = (ListView) findViewById(R.id.drawerMenu);
         prefMenu.setDivider(null);
         prefMenu.setAdapter(new DrawerMenu(this, prefmen));
@@ -156,7 +140,18 @@ public class Utama extends AppCompatActivity
                         startActivity(new Intent(Utama.this, AboutUs.class));
                         break;
                     case 2:
-                        startActivity(new Intent(Utama.this,UserStats.class));
+                        startActivity(new Intent(Utama.this, UserStats.class));
+                        break;
+                    case 3:
+                        PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+                        try {
+                            startActivityForResult(builder.build(Utama.this),PLACE_PICKER_REQUEST);
+                        } catch (GooglePlayServicesRepairableException e) {
+                            e.printStackTrace();
+                        } catch (GooglePlayServicesNotAvailableException e) {
+                            e.printStackTrace();
+                        }
+                        break;
                 }
             }
 
@@ -166,14 +161,49 @@ public class Utama extends AppCompatActivity
         });
         setFiveTimes(this);
 
+        SharedPreferences sharedPreferences = this.getSharedPreferences("location", Context.MODE_PRIVATE);
+
+        Double deflat = -6.9147;
+        Float lat = sharedPreferences.getFloat("latloc", deflat.floatValue());
+
+        Double deflon = 107.6098;
+        Float lon = sharedPreferences.getFloat("lonloc", deflon.floatValue());
+
+        Log.d("loc", "onCreateView: " + lat.floatValue() + " " + lon.floatValue());
+
+        ChangeAllAboutHeader(PrayTime.getFiveTimes(lon,lat,new Date()));
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        if (requestCode == PLACE_PICKER_REQUEST){
+            if (resultCode == RESULT_OK){
+                Place place = PlacePicker.getPlace(data,this);
+                LatLng location = place.getLatLng();
+                Double lat = location.latitude;
+                Double lon = location.longitude;
+                SharedPreferences sharedPreferences = this.getSharedPreferences("location",Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                Log.d("loc", "onActivityResult: "+lat.floatValue()+" "+lon.floatValue());
+
+                editor.putFloat("latloc", lat.floatValue());
+                editor.putFloat("lonloc",lon.floatValue());
+
+                editor.commit();
+            }
+        }
     }
 
     //alarm setter for setting each pray alarm
-    public static void setFiveTimes(Context context){
+    public static void setFiveTimes(Context context) {
         //unggal poe
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(System.currentTimeMillis());
-        cal.set(Calendar.HOUR_OF_DAY,0);
+        cal.set(Calendar.HOUR_OF_DAY, 0);
 
         Intent alertIntent = new Intent(context, AlertRecivier.class);
         AlarmManager alma = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
@@ -210,8 +240,46 @@ public class Utama extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    
-  
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client.connect();
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "Utama Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app deep link URI is correct.
+                Uri.parse("android-app://com.example.kucing.salim/http/host/path")
+        );
+        AppIndex.AppIndexApi.start(client, viewAction);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "Utama Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app deep link URI is correct.
+                Uri.parse("android-app://com.example.kucing.salim/http/host/path")
+        );
+        AppIndex.AppIndexApi.end(client, viewAction);
+        client.disconnect();
+    }
+
 
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
@@ -287,44 +355,32 @@ public class Utama extends AppCompatActivity
 
     }
 
-    public void onFragmentInteraction(Uri uri){
+    public void onFragmentInteraction(Uri uri) {
         //you can leave it empty
     }
 
-    @Override
-    public void ChangeAllAboutHeader(ArrayList<ItemJadwalSholat> jaso) {
-        //used for change the main timer in the main activity
+
+    public void ChangeAllAboutHeader(ArrayList<String> jaso) {
         try {
+            ArrayList<Date> jasoTime = new ArrayList<>();
+            for (int i=0; i< jaso.size();i++)
+                jasoTime.add(waktu.parse(jaso.get(i)));
+
             Date a = waktu.parse(waktu.format(new Date()));
-            Date[] b = new Date[5];
-            for (int i=0;i<5;i++){
-                b[i] = waktu.parse(jaso.get(i).getWaktuna());
-                Log.d("wrong", "ChangeAllAboutHeader: "+b[i]);
+            ArrayList<String> nama = PrayTime.getFiveNames();
+
+            for (int i =1; i<5;i++ )
+                if (a.before(jasoTime.get(i)) && a.after(jasoTime.get(i-1))){
+                    now_date.setText(jaso.get(i));
+                    next_pray.setText(nama.get(i));
+                }
+            if (a.after(jasoTime.get(4))||a.before(jasoTime.get(0))){
+                now_date.setText(jaso.get(0));
+                next_pray.setText(nama.get(0));
             }
-            Log.d("wrong", "ChangeAllAboutHeader: "+a);
-            //mengganti tulisan header
-            if (a.before(b[1])&&a.after(b[0])) {
-                now_date.setText(jaso.get(1).getWaktuna());
-                next_pray.setText(jaso.get(1).getSolatna());
-            }
-            if (a.before(b[2])&&a.after(b[1])) {
-                now_date.setText(jaso.get(2).getWaktuna());
-                next_pray.setText(jaso.get(2).getSolatna());
-            }
-            if (a.before(b[3])&&a.after(b[2])) {
-                now_date.setText(jaso.get(3).getWaktuna());
-                next_pray.setText(jaso.get(3).getSolatna());
-            }
-            if (a.before(b[4])&&a.after(b[3])) {
-                now_date.setText(jaso.get(4).getWaktuna());
-                next_pray.setText(jaso.get(4).getSolatna());
-            }
-            if (a.after(b[4])||a.before(b[0])){
-                now_date.setText(jaso.get(0).getWaktuna());
-                next_pray.setText(jaso.get(0).getSolatna());
-            }
+
             //mengganti gambar header
-            if (a.after(b[0]) && a.before(b[3])){
+            if (a.after(jasoTime.get(0)) && a.before(jasoTime.get(3))) {
                 header.setImageResource(R.drawable.headerbh);
                 hicon.setImageResource(R.drawable.day_big);
                 ActionBar bar = getActionBar();
@@ -336,7 +392,7 @@ public class Utama extends AppCompatActivity
                     win.setStatusBarColor(getResources().getColor(R.color.colorPrimaryDarkDay));
                 }
             }
-            if (a.after(b[3]) || a.before(b[0])){
+            if (a.after(jasoTime.get(3)) || a.before(jasoTime.get(0))) {
                 header.setImageResource(R.drawable.headerbg);
                 hicon.setImageResource(R.drawable.night_big);
                 ActionBar bar = getActionBar();
@@ -353,8 +409,9 @@ public class Utama extends AppCompatActivity
         } catch (ParseException e) {
             e.printStackTrace();
         }
-
     }
+
+
 
 
 }

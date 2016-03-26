@@ -10,15 +10,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.example.kucing.salim.ItemJadwalSholat;
 import com.example.kucing.salim.JadwalSolatParser;
 import com.example.kucing.salim.OnFragmentInteractionListener;
 import com.example.kucing.salim.R;
 import com.example.kucing.salim.jadwalSholatAdapter;
-
-import org.json.JSONException;
+import com.example.kucing.salim.PrayTime;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -45,8 +43,6 @@ public class Jadwal extends Fragment implements OnFragmentInteractionListener {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    final String TAG = "whats wrong";
-    public String expire_jason = new SimpleDateFormat("M/yyyy").format(new Date());
 
     private OnFragmentInteractionListener mListener;
 
@@ -84,29 +80,28 @@ public class Jadwal extends Fragment implements OnFragmentInteractionListener {
     }
 
     @Bind(R.id.Jaso) ListView jaso;
+    jadwalSholatAdapter adapter;
+    ArrayList<String> PrayTimesSet;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_jadwal, container, false);
         ButterKnife.bind(this, v);
-        SharedPreferences shape = getActivity().getSharedPreferences("Jaso", Context.MODE_PRIVATE);
-        String dayoftoday = new SimpleDateFormat("d").format(new Date());
-        String Jason = shape.getString(expire_jason, "Empty");
-        Log.d(TAG, "onCreateView: "+expire_jason);
-        if (!Jason.equals("Empty")) {
-            Log.d(TAG, "onCreateView: ekse "+Jason);
-            try {
-                jadwalSholatAdapter adapter = JadwalSolatParser.getAdapter(Jason, dayoftoday, getResources(), getActivity());
-                jaso.setAdapter(adapter);
-                jadwalSholatAdapter adapterr = (jadwalSholatAdapter) jaso.getAdapter();
-                mListener.ChangeAllAboutHeader(adapterr.getData());
-            } catch (JSONException e) {
-                e.printStackTrace();
-                Toast.makeText(getContext(),"Tidak Berhasil Mendapatkan Jadwal Sholat Terbaru",Toast.LENGTH_LONG).show();
-            }
-        } else {
-        }
+
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("location",Context.MODE_PRIVATE);
+
+        Double deflat = -6.9147;
+        Float lat = sharedPreferences.getFloat("latloc", deflat.floatValue());
+
+        Double deflon = 107.6098;
+        Float lon = sharedPreferences.getFloat("lonloc", deflon.floatValue());
+
+        Log.d("loc", "onCreateView: "+lat.floatValue()+" "+lon.floatValue());
+
+        PrayTimesSet = PrayTime.getFiveTimes(lon, lat, new Date());
+        adapter = JadwalSolatParser.getAdapter(PrayTimesSet,getResources(),getActivity());
+        jaso.setAdapter(adapter);
+
         return v;
     }
 
@@ -138,10 +133,8 @@ public class Jadwal extends Fragment implements OnFragmentInteractionListener {
 
     }
 
-    @Override
-    public void ChangeAllAboutHeader(ArrayList<ItemJadwalSholat> jaso) {
 
-    }
+
 
     /**
      * This interface must be implemented by activities that contain this

@@ -9,6 +9,5 @@ import java.util.ArrayList;
  */
 public interface OnFragmentInteractionListener {
     public void onFragmentInteraction(Uri uri);
-    public void ChangeAllAboutHeader(ArrayList<ItemJadwalSholat> jaso);
 
 }

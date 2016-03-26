@@ -14,6 +14,7 @@ import org.json.JSONException;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -21,22 +22,33 @@ import java.util.Date;
  * Created by node06 on 09/02/2016.
  */
 public class AlertRecivier extends WakefulBroadcastReceiver {
+    ArrayList<String> today_prayer_time;
+
     @Override
     public void onReceive(Context context, Intent intent) {
         String[] AlarmKey = {"subuh_alarm","dzuhr_alarm","ashar_alarm","maghrib_alarm","isya_alarm"};
         SharedPreferences notif = PreferenceManager.getDefaultSharedPreferences(context);
-        SharedPreferences sape = context.getSharedPreferences("Jaso", Context.MODE_PRIVATE);
-        String expired_jason = new SimpleDateFormat("M/yyyy").format(new Date());
-        String today_date = new SimpleDateFormat("d").format(new Date());
-        try {
-            String[] today_prayer_time = JadwalSolatParser.getArrayJaso(sape.getString(expired_jason,"Empty"),today_date);
-            for (int i=0;i<5;i++){
-                if (notif.getBoolean(AlarmKey[i],true))
-                    setAlarmEachPrayerTime(today_prayer_time[i],context,i);
-            }
-        } catch (JSONException | ParseException e) {
-            e.printStackTrace();
+
+        SharedPreferences sharedPreferences = context.getSharedPreferences("location", Context.MODE_PRIVATE);
+
+        Double deflat = -6.9147;
+        Float lat = sharedPreferences.getFloat("latloc", deflat.floatValue());
+
+        Double deflon = 107.6098;
+        Float lon = sharedPreferences.getFloat("lonloc", deflon.floatValue());
+
+        Log.d("loc", "setListData: " + lat + " " + lon);
+
+        today_prayer_time = PrayTime.getFiveTimes(lon,lat,new Date());
+        for (int i=0;i<5;i++){
+            if (notif.getBoolean(AlarmKey[i],true))
+                try {
+                    setAlarmEachPrayerTime(today_prayer_time.get(i),context,i);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
         }
+
     }
 
     public void setAlarmEachPrayerTime(String prayerTime,Context context, int n) throws ParseException {
